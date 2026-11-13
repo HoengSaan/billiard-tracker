@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billiard Scoreboard Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ ICON SPRITE (Lucide v1.55.0, ISC) ============ -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="lucide-sprite" style="display:none" aria-hidden="true">
+    <!-- Lucide Icons v1.55.0 - https://lucide.dev - ISC License
+         Trimmed to only the symbols used by this project. -->
+    <defs>
+      <symbol id="moon" viewBox="0 0 24 24">
+        <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+      </symbol>
+      <symbol id="sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2" />
+        <path d="M12 20v2" />
+        <path d="m4.93 4.93 1.41 1.41" />
+        <path d="m17.66 17.66 1.41 1.41" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <path d="m6.34 17.66-1.41 1.41" />
+        <path d="m19.07 4.93-1.41 1.41" />
+      </symbol>
+      <symbol id="plus" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+      </symbol>
+      <symbol id="pencil" viewBox="0 0 24 24">
+        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+        <path d="m15 5 4 4" />
+      </symbol>
+      <symbol id="x" viewBox="0 0 24 24">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </symbol>
+      <symbol id="play" viewBox="0 0 24 24">
+        <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
+      </symbol>
+      <symbol id="square" viewBox="0 0 24 24">
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+      </symbol>
+      <symbol id="pause" viewBox="0 0 24 24">
+        <rect x="14" y="3" width="5" height="18" rx="1" />
+        <rect x="5" y="3" width="5" height="18" rx="1" />
+      </symbol>
+      <symbol id="eye" viewBox="0 0 24 24">
+        <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+      <symbol id="eye-off" viewBox="0 0 24 24">
+        <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+        <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+        <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+        <path d="m2 2 20 20" />
+      </symbol>
+      <symbol id="undo-2" viewBox="0 0 24 24">
+        <path d="M9 14 4 9l5-5" />
+        <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+      </symbol>
+      <symbol id="chevron-up" viewBox="0 0 24 24">
+        <path d="m18 15-6-6-6 6" />
+      </symbol>
+      <symbol id="chevron-down" viewBox="0 0 24 24">
+        <path d="m6 9 6 6 6-6" />
+      </symbol>
+      <symbol id="chart-column" viewBox="0 0 24 24">
+        <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+        <path d="M18 17V9" />
+        <path d="M13 17V5" />
+        <path d="M8 17v-3" />
+      </symbol>
+      <symbol id="circle-dot" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="12" cy="12" r="10" />
+      </symbol>
+      <symbol id="upload" viewBox="0 0 24 24">
+        <path d="M12 3v12" />
+        <path d="m17 8-5-5-5 5" />
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      </symbol>
+      <symbol id="download" viewBox="0 0 24 24">
+        <path d="M12 15V3" />
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <path d="m7 10 5 5 5-5" />
+      </symbol>
+      <symbol id="trash" viewBox="0 0 24 24">
+        <path d="M10 11v6" />
+        <path d="M14 11v6" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        <path d="M3 6h18" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      </symbol>
+      <symbol id="eraser" viewBox="0 0 24 24">
+        <path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21" />
+        <path d="m5.082 11.09 8.828 8.828" />
+      </symbol>
+      <symbol id="target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="6" />
+        <circle cx="12" cy="12" r="2" />
+      </symbol>
+      <symbol id="link" viewBox="0 0 24 24">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+      </symbol>
+      <symbol id="maximize" viewBox="0 0 24 24">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+        <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+        <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+      </symbol>
+      <symbol id="minimize" viewBox="0 0 24 24">
+        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+      </symbol>
+      <symbol id="info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4" />
+        <path d="M12 8h.01" />
+      </symbol>
+      <symbol id="circle-check" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m16 9-5.5 5.5L8 12" />
+      </symbol>
+      <symbol id="triangle-alert" viewBox="0 0 24 24">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+      </symbol>
+      <symbol id="circle-x" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m15 9-6 6" />
+        <path d="m9 9 6 6" />
+      </symbol>
+      <symbol id="arrow-right" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="app-grid" id="app">
+
+  <header class="card header">
+    <h1>Billiard Scoreboard Tracker</h1>
+    <div class="header-controls">
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="zh">官话</option>
+        <option value="zh_TW">官話</option>
+        <option value="yue">粵語</option>
+        <option value="jp">日本語</option>
+      </select>
+      <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><svg class="icon" aria-hidden="true"><use href="#moon"/></svg></button>
+    </div>
+  </header>
+
+  <!-- SETUP -->
+  <div class="card qskillbowlard" id="setupCard">
+    <div class="setup-row">
+      <div class="field-group" id="playerGroup">
+        <label data-i18n="player">Player</label>
+        <select id="playerSelect"><option value="">--</option><option value="p_default">Default</option></select>
+        <button class="btn-icon" id="btnAddPlayer" title="Add Player"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button>
+        <button class="btn-icon" id="btnEditPlayer" title="Edit Player" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg></button>
+        <button class="btn-icon danger" id="btnDeletePlayer" title="Delete Player" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#x"/></svg></button>
+      </div>
+      <div class="field-group" id="tableGroup">
+        <label data-i18n="table">Table</label>
+        <select id="tableSelect"><option value="">--</option><option value="t_default">Default Table</option><option value="t_1790945127914">Manon</option></select>
+        <button class="btn-icon" id="btnAddTable" title="Add Table"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button>
+        <button class="btn-icon" id="btnEditTable" title="Edit Table" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg></button>
+        <button class="btn-icon danger" id="btnDeleteTable" title="Delete Table" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#x"/></svg></button>
+      </div>
+      <div class="field-group" id="modeGroup">
+        <label data-i18n="mode">Mode</label>
+        <div class="radio-pri">
+          <label><input type="radio" name="gameMode" value="standard" checked=""><span data-i18n="modeStd">Q SKILL</span></label>
+          <label><input type="radio" name="gameMode" value="bowlard"><span data-i18n="modeBowl">BOWLARD</span></label>
+          <label><input type="radio" name="gameMode" value="rds"><span data-i18n="modeRds">RDS</span></label>
+        </div>
+      </div>
+      <div class="field-group" id="sessionTypeGroup">
+        <label data-i18n="session">Session</label>
+        <div class="radio-pri">
+          <label><input type="radio" name="sessionType" value="5"><span>5</span></label>
+          <label><input type="radio" name="sessionType" value="10" checked=""><span>10</span></label>
+        </div>
+      </div>
+      <div class="field-group" id="bowlardInputModeGroup" style="display: none;">
+        <label data-i18n="inputMode">Input</label>
+        <div class="radio-pri">
+          <label><input type="radio" name="bowlardInputMode" value="perRoll" checked=""><span data-i18n="inputPerRoll">Per Roll</span></label>
+          <label><input type="radio" name="bowlardInputMode" value="cumulative"><span data-i18n="inputCumulative">Cumulative</span></label>
+        </div>
+      </div>
+      <div class="field-group" id="targetGroup">
+        <label data-i18n="target">Target</label>
+        <input type="number" id="targetScore" value="100" min="0" max="200">
+      </div>
+      <div class="field-group" id="tdfDisplayGroup">
+        <label>TDF</label>
+        <div class="radio-pri">
+          <label><input type="radio" name="tdfDisplay" value="adjusted" checked=""><span data-i18n="tdfAdjusted">Adjusted</span></label>
+          <label><input type="radio" name="tdfDisplay" value="raw"><span data-i18n="tdfRaw">Raw</span></label>
+        </div>
+      </div>
+      <!-- RDS controls: only visible while the RDS reference view is open. -->
+      <div class="rds-record field-group" id="rdsRecord" style="margin-left: auto;">
+        <!-- First run: the player picks where they start. Hidden once a record exists. -->
+        <div class="rds-setup" id="rdsSetup" style="display:none;">
+          <div class="rds-setup-text">
+            <strong data-i18n="rdsSetupTitle">Set your starting level</strong>
+            <span data-i18n="rdsSetupHint">Pick the level you can run 2 of 3 racks at. You can change it later.</span>
+          </div>
+          <div class="rds-setup-ctl">
+            <select id="rdsStartLevel" aria-label="Level"></select>
+            <button type="button" class="rds-setup-ok" id="rdsStartOk" data-i18n="rdsSetupConfirm">Set level</button>
+          </div>
+        </div>
+        <div class="setup-row" id="rdsRecordTop">
+          <div class="field-group">
+            <label data-i18n="rdsCurrentLevel">Current level</label>
+            <span class="rds-curlevel" id="rdsCurrentLevel">1</span>
+            <button type="button" class="rds-linkbtn" id="rdsChangeLevel" data-i18n="rdsChangeLevel">Change</button>
+          </div>
+          <div class="field-group">
+            <label data-i18n="rdsRacksRun">Racks run this round</label>
+            <div class="rds-log-btns" id="rdsLogBtns"></div>
+          </div>
+          <button type="button" class="rds-histbtn" id="rdsHistBtn">History</button>
+        </div>
+      </div>
+      <button class="btn-pri" id="btnStart" data-i18n="start" style="margin-left: auto;"><svg class="icon" aria-hidden="true"><use href="#play"/></svg><span class="label">Start</span></button>
+    </div>
+  </div>
+
+  <!-- RDS REFERENCE (Runout Drill System) -->
+  <div class="card rds-card" id="rdsCard" style="display:none;">
+    <div class="rds-head">
+      <div>
+        <h2 data-i18n="rdsTitle">Runout Drill System</h2>
+      </div>
+      <div class="rds-levelpick">
+        <span class="rds-picklabel" data-i18n="rdsLevel">Level</span>
+        <div class="rds-chips" id="rdsChips"></div>
+      </div>
+    </div>
+    <div class="rds-body">
+      <div class="rds-rackwrap">
+        <div class="rds-rack" id="rdsRack"></div>
+      </div>
+      <div class="rds-main">
+        <div class="rds-leveltitle" id="rdsLevelTitle"></div>
+        <ul class="rds-rules" id="rdsRules"></ul>
+        <div class="rds-meta" id="rdsMeta"></div>
+      </div>
+    </div>
+    <div class="rds-hundred" id="rds100">
+      <div class="rds100-top">
+        <h3 data-i18n="rds100">RDS 100</h3>
+        <div class="rds100-live" id="rds100Live" style="display:none;">
+          <span class="rds100-stat">
+            <b><span id="rds100Score">100</span><i class="rds100-adj" id="rds100Adj"></i></b>
+            <span data-i18n="rds100Score">Score</span>
+          </span>
+          <span class="rds100-stat">
+            <b id="rds100Ref">16</b>
+            <span data-i18n="rds100Ref">Level for this score</span>
+          </span>
+          <span class="rds100-stat">
+            <b class="rds100-table" id="rds100Table">—</b>
+            <span data-i18n="table">Table</span>
+          </span>
+          <span class="rds100-time" id="rds100Time">00:00</span>
+          <button type="button" class="rds-pill" id="rds100Pause" data-i18n="rds100Pause">Pause</button>
+          <button type="button" class="rds-pill rds-pill-danger" id="rds100End" data-i18n="rds100End">End</button>
+        </div>
+      </div>
+      <div class="rds100-idle" id="rds100Idle">
+        <div class="rds-field">
+          <label class="rds-record-label" for="rds100Level" data-i18n="rds100StartLevel">Starting level</label>
+          <select id="rds100Level" aria-label="Level"></select>
+        </div>
+        <button type="button" class="rds-setup-ok" id="rds100Start" data-i18n="rds100Start">Start</button>
+      </div>
+      <div class="rds100-play" id="rds100Play" style="display:none;">
+        <span class="rds-record-label" id="rds100Prompt" data-i18n="rds100Pick">How many balls are left on the table?</span>
+        <div class="rds100-balls" id="rds100Balls"></div>
+      </div>
+      <div class="rds100-histwrap">
+        <div class="rds100-histhead">
+          <span class="rds-record-label" data-i18n="rds100Hist">RDS 100 history</span>
+          <button type="button" class="rds100-clear" id="rds100Clear" data-i18n="rds100Clear" style="display:none;">Clear</button>
+        </div>
+        <div class="rds-history" id="rds100History"></div>
+      </div>
+    </div>
+    <div class="rds-foot">
+      <div class="rds-footblock">
+        <h3 data-i18n="rdsGeneral">General rules</h3>
+        <p data-i18n="rdsGeneralText">Start with a break shot, then take ball in hand — place the cue ball anywhere on the table. There is no penalty for a scratch on the break, and balls pocketed on the break stay down.</p>
+      </div>
+      <div class="rds-footblock">
+        <h3 data-i18n="rdsProgression">Progression</h3>
+        <p data-i18n="rdsProgressionText">Run 2 of 3 racks at a level to move up one level; run none of 3 to move down one level. Pick a level you are confident of running 2 of 3, then work up.</p>
+      </div>
+      <div class="rds-footblock">
+        <h3 data-i18n="rds100">RDS 100</h3>
+        <p data-i18n="rds100Text">Scored variant: start with 100 points, attempt one rack at each level, and subtract the points left on the table after a miss or foul.</p>
+      </div>
+    </div>
+    <!-- Rating comparison table: BU score / ABCD / Fargo / Q Skill / Bowlard -->
+    <div class="rds-ranks">
+      <div class="rds-ranks-head">
+        <h3 data-i18n="rdsRankTable">Rating comparison</h3>
+        <span class="rds-ranks-hint" data-i18n="rdsDescHint">Tap a level to see the description.</span>
+      </div>
+      <table class="rds-rank-table">
+        <thead>
+          <tr>
+            <th data-i18n="rdsColLevel">Level</th>
+            <th>RDS</th>
+            <th data-i18n="rdsColBu">BU score</th>
+            <th data-i18n="rdsColAbcd">ABCD</th>
+            <th data-i18n="rdsColFargo">Fargo</th>
+            <th data-i18n="rdsColQSkill">Q Skill</th>
+            <th data-i18n="rdsColBowlard">Bowlard</th>
+          </tr>
+        </thead>
+        <tbody id="rdsRankBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card stats-card qskillbowlard" id="statsCard" style="display:none;">
+    <div class="stats-grid">
+      <div class="stat-item"><span class="label" data-i18n="time">Time</span><span class="value" id="timerDisplay">00:00</span></div>
+      <div class="stat-item"><span class="value" id="inningDisplay">0/0</span></div>
+      <div class="stat-item"><span class="label" data-i18n="avg">Average</span><span class="value" id="avgDisplay">0.0</span></div>
+      <div class="stat-item" id="highStatItem" style="display: flex;"><span class="label" data-i18n="highRun">High Run</span><span class="value" id="highDisplay">0</span></div>
+      <div class="stat-item"><span class="label" data-i18n="score">Score</span><span class="value" id="scoreDisplay">0</span></div>
+    </div>
+    <!-- Compact one-line summary, shown on phones instead of the labelled grid -->
+    <div class="stats-compact" id="statsCompact">
+      <span class="compact-time" id="compactTime">00:00</span>
+      <span class="compact-sep">|</span>
+      <span class="compact-score" id="compactScore">0</span>
+      <span class="compact-sep">/</span>
+      <span class="compact-target" id="compactTarget">100</span>
+      <span class="compact-unit" data-i18n="pts">pts</span>
+    </div>
+    <div class="target-bar-wrap">
+      <div class="target-bar-labels">
+        <span data-i18n="targetProgress">Target Progress</span>
+        <span id="targetProgressText">0 / 100</span>
+      </div>
+      <div class="target-bar"><div class="target-bar-fill" id="targetBarFill"></div></div>
+    </div>
+    <div class="inning-chips" id="inningScores" style="display: grid;"></div>
+    <div class="bowlard-scorecard" id="bowlardScorecard" style="display:none;">
+      <div class="bowlard-board" id="bowlardBoard"></div>
+    </div>
+  </div>
+
+  <!-- ENTRY (Q SKILL + BOWLARD share one card; only the group swaps) -->
+  <div class="card" id="entryCard" style="display:none;">
+    <div class="card-header-row">
+      <div class="bowlard-entry-title" id="qskillEntryTitle">Inning 1 / 10</div>
+      <div class="bowlard-entry-title" id="bowlardEntryTitle" style="display:none;">Frame 1 · Roll 1</div>
+      <div class="card-actions">
+        <button class="btn-sm" data-action="focus" data-i18n="focusOn"><svg class="icon" aria-hidden="true"><use href="#eye"/></svg><span class="label">Focus</span></button>
+        <button class="btn-sm" data-action="hide" data-i18n="hide"><span class="label">Hide</span></button>
+        <button class="btn-sm" data-action="pause" data-i18n="pause"><span class="label">Pause</span></button>
+        <button class="btn-sm" data-action="undo" data-i18n="undo"><span class="label">Undo</span></button>
+      </div>
+    </div>
+    <div id="qskillEntryGroup">
+    <div class="score-grid desktop" id="scoreGridDesktop"><button class="score-btn zero-btn" data-score="0">0</button><button class="score-btn color-red" data-score="1">1</button><button class="score-btn color-red" data-score="2">2</button><button class="score-btn color-red" data-score="3">3</button><button class="score-btn color-red" data-score="4">4</button><button class="score-btn color-red" data-score="5">5</button><button class="score-btn color-red" data-score="6">6</button><button class="score-btn color-red" data-score="7">7</button><button class="score-btn color-red" data-score="8">8</button><button class="score-btn color-red" data-score="9">9</button><button class="score-btn color-purple" data-score="10">10</button><button class="score-btn color-blue" data-score="11">11</button><button class="score-btn color-blue" data-score="12">12</button><button class="score-btn color-blue" data-score="13">13</button><button class="score-btn color-blue" data-score="14">14</button><button class="score-btn color-blue" data-score="15">15</button><button class="score-btn color-blue" data-score="16">16</button><button class="score-btn color-blue" data-score="17">17</button><button class="score-btn color-blue" data-score="18">18</button><button class="score-btn color-blue" data-score="19">19</button><button class="score-btn color-gold" data-score="20">20</button></div>
+    <div class="score-grid mobile" id="scoreGridMobile"><button class="score-btn zero-btn" data-score="0">0</button><button class="score-btn color-red" data-score="1">1</button><button class="score-btn color-red" data-score="2">2</button><button class="score-btn color-red" data-score="3">3</button><button class="score-btn color-red" data-score="4">4</button><button class="score-btn color-red" data-score="5">5</button><button class="score-btn color-red" data-score="6">6</button><button class="score-btn color-red" data-score="7">7</button><button class="score-btn color-red" data-score="8">8</button><button class="score-btn color-red" data-score="9">9</button><button class="score-btn color-purple" data-score="10">10</button><button class="score-btn color-blue" data-score="11">11</button><button class="score-btn color-blue" data-score="12">12</button><button class="score-btn color-blue" data-score="13">13</button><button class="score-btn color-blue" data-score="14">14</button><button class="score-btn color-blue" data-score="15">15</button><button class="score-btn color-blue" data-score="16">16</button><button class="score-btn color-blue" data-score="17">17</button><button class="score-btn color-blue" data-score="18">18</button><button class="score-btn color-blue" data-score="19">19</button><button class="score-btn color-gold" data-score="20">20</button></div>
+    <div class="break-row" id="breakRow" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
+      <span style="color:var(--text-secondary); margin-right:4px;" data-i18n="break">Break</span>
+      <label class="radio-sec"><input type="radio" name="breakResult" value="clean" checked=""> <span data-i18n="clean">Clean</span></label>
+      <label class="radio-sec"><input type="radio" name="breakResult" value="scratch"> <span data-i18n="scratch">Scratch (-1)</span></label>
+      <label class="radio-sec"><input type="radio" name="breakResult" value="offTable"> <span data-i18n="offTable">Off Table (-2)</span></label>
+      <label class="radio-sec"><input type="radio" name="breakResult" value="reRack"> <span data-i18n="reRack">Re-rack (-1)</span></label>
+      <label class="radio-sec"><input type="checkbox" id="chkBallInHand"> <span data-i18n="ballInHand">Ball in Hand (-1)</span></label>
+    </div>
+    </div><!-- /#qskillEntryGroup -->
+
+    <div id="bowlardEntryGroup" style="display:none;">
+      <div class="bowlard-entry-grid" id="bowlardEntryGrid"></div>
+    </div>
+
+    <div id="detailSection">
+    <div class="detail-grid" id="detailsGrid">
+      <label class="detail-check always"><input type="checkbox" id="chkIllegalBreak"> <span data-i18n="illegalBreak">Illegal Break</span></label>
+      <label class="detail-check always"><input type="checkbox" id="chkBreakNoIn"> <span data-i18n="breakNoIn">Break No In</span></label>
+      <label class="detail-check always"><input type="checkbox" id="chkFluke"> <span data-i18n="fluke">Fluke</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkScratch"> <span data-i18n="mScratch">Scratch</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkOffTable"> <span data-i18n="mOffTable">Off Table</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkNoCushion"> <span data-i18n="noCushion">No Cushion</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkMiscue"> <span data-i18n="miscue">Miscue</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkDoubleTap"> <span data-i18n="doubleTap">Double Tap</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkOtherFouls"> <span data-i18n="otherFouls">Other Fouls</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkPositioning"> <span data-i18n="positioning">Positioning</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkSideSpin"> <span data-i18n="sideSpin">Side Spin</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkTopSpin"> <span data-i18n="topSpin">Top Spin</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkButtonSpin"> <span data-i18n="buttonSpin">Button Spin</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkHandBridge"> <span data-i18n="handBridge">Hand Bridge</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkMechanicalBridge"> <span data-i18n="mechBridge">Mech. Bridge</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkKick"> <span data-i18n="kick">Kick</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkBank"> <span data-i18n="bank">Bank</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkCut"> <span data-i18n="cut">Cut</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkCannon"> <span data-i18n="cannon">Cannon</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkKiss"> <span data-i18n="kiss">Kiss</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkCombo"> <span data-i18n="combo">Combo</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkLong"> <span data-i18n="long">Long</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkMasse"> <span data-i18n="masse">Masse</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkJump"> <span data-i18n="jump">Jump</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkCushion"> <span data-i18n="cushion">Cushion</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkSidePocket"> <span data-i18n="sidePocket">Side Pocket</span></label>
+      <label class="detail-check"><input type="checkbox" id="chkCornerPocket"> <span data-i18n="cornerPocket">Corner Pocket</span></label>
+    </div>
+    <button class="detail-toggle" id="detailsToggle" data-i18n="showMore">Show More</button>
+    </div><!-- /#detailSection -->
+  </div>
+
+  <!-- LIFETIME -->
+  <div class="card qskillbowlard" id="lifetimeCard">
+    <h2 data-i18n="lifetime">STATS</h2>
+    <div class="lifetime-grid">
+    <div class="lifetime-duo-box">
+      <div class="duo-stat">
+        <div class="number" id="lifetimeAvg">6.4</div>
+        <div class="sub" id="lblAvgLabel" data-i18n="avgLabel">Average</div>
+      </div>
+      <div class="duo-stat">
+        <div class="number" id="lifetimeHigh">18</div>
+        <div class="sub" data-i18n="highRun">High Run</div>
+      </div>
+      <div class="duo-stat">
+        <div class="number" id="lifetimeInnings">117</div>
+        <div class="sub" id="lblInningsLabel" data-i18n="inningsLabel">Total Innings</div>
+      </div>
+    </div>
+
+    <div class="lifetime-box">
+      <div class="number"><span class="rank-plate r-int-m" id="lifetimeRank">Intermediate</span></div>
+      <div class="sub" data-i18n="rankLabel">Rank</div>
+      <div class="sub" id="lifetimeNextRank" style="margin-top:6px; font-size:1rem;"></div>
+    </div>
+
+    <div class="lifetime-box">
+      <div class="sub" data-i18n="commonFouls">Common Fouls</div>
+      <div class="detail-list" id="lifetimeFouls">Off Table (1)</div>
+      <div class="sub" style="margin-top:6px;" data-i18n="commonMistakes">Common Mistakes</div>
+      <div class="detail-list" id="lifetimeMistakes">No Record</div>
+    </div>
+  </div>
+    <button class="ranks-toggle" id="ranksToggle" data-i18n="showRanks">Show Rules &amp; Ranks</button>
+      <div id="infoWrap" style="display:none; margin-top:12px;">
+      <div class="duo-grid" style="margin-bottom:16px;">
+        <div class="card">
+          <h2><span data-i18n="modeStd">Q SKILL</span> <span data-i18n="rules">RULES</span></h2>
+          <ol>
+            <li data-i18n="rule1">Rack 15 balls on the Foot Spot, cue ball on the Kitchen. Call pocket needed.</li>
+            <li data-i18n="rule2">Break Penalty: Scratch (-1), cue ball Off Table (-2), Re-rack (-1)</li>
+            <li data-i18n="rule3">Ball In Hand: After the break, if player does not like the shot, player can move cue ball with 1 point subtracted.</li>
+            <li data-i18n="rule4">First 10 balls: 1pt each | Last 5 balls: 2pts each (needs to be pocketed in order, if pocket during the first 10 balls, it will be counted as 1pt)</li>
+            <li data-i18n="rule5">10 innings = 1 session, max 200 points. Innings end if the player failed to pocket a ball into a called pocket or commits a foul.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h2><span data-i18n="modeBowl">BOWLARD</span> <span data-i18n="rules">RULES</span></h2>
+          <ol>
+            <li data-i18n="brule1">Rack 10 balls on the Foot Spot, cue ball on the Kitchen. Call Shot needed.</li>
+            <li data-i18n="brule2">All balls worth 1 point and can be shot in any order.</li>
+            <li data-i18n="brule3">If player clears the table on 1st inning, it is a "Strike", you get 10 points, plus the points from your next 2 innings. If player clears the table on 2nd inning, it is a "Spare", you get 10 points, plus the points from your next inning.</li>
+            <li data-i18n="brule4">10 frames = 1 session, max 300 points. Player have 2 innings per frames. Innings end if the player failed to pocket a ball into a called pocket or commits a foul. Frame ends after 2 innings are finished or all balls are potted.</li>
+            <li data-i18n="brule5">10th Frame — Every strike or spare earns one bonus roll, and a new rack is set up whenever a strike or spare is completed. That gives you up to 3 rolls in the frame. If no strike or spare is earned, the frame ends like any other frame.</li>
+          </ol>
+        </div>
+      </div>
+      <table class="summary-table ranks-table rds-rank-table">
+        <thead>
+          <tr>
+            <th data-i18n="rdsColLevel">Level</th>
+            <th>RDS</th>
+            <th data-i18n="rdsColBu">BU score</th>
+            <th data-i18n="rdsColAbcd">ABCD</th>
+            <th data-i18n="rdsColFargo">Fargo</th>
+            <th id="ranksColQSkill" data-i18n="rdsColQSkill" class="col-active">Q Skill</th>
+            <th id="ranksColBowlard" data-i18n="rdsColBowlard">Bowlard</th>
+          </tr>
+        </thead>
+        <tbody id="rankTiersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="card qskillbowlard" id="historyCard">
+    <h2 data-i18n="history">SESSION HISTORY</h2>
+    <div id="historyList"><div class="history-item">
+      <div class="history-header">
+        <div class="history-left">
+          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/3/2026 09:26 PM (00:03)</span>
+          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
+          <span style="font-weight:600;">40 <span class="tdf-adj">(44)</span> point(s)</span>
+          <span style="color:var(--text-muted);">[ 10/10, Average: 4.0 <span class="tdf-adj">(4)</span> ]</span>
+          <span class="rank-plate r-beg-m" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
+        </div>
+        <div class="history-right">
+          <button onclick="toggleHistoryDetail(0)">View Details</button>
+          <button class="del" onclick="deleteSession('s_1791033983409')">Delete</button>
+        </div>
+      </div>
+      <div class="history-details" id="historyDetail_0">
+        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">4</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div></div>
+        
+      </div>
+    </div><div class="history-item">
+      <div class="history-header">
+        <div class="history-left">
+          <span><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg> 10/3/2026 09:25 PM (00:20)</span>
+          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
+          <span style="font-weight:600;">95 <span class="tdf-adj">(104)</span> point(s)</span>
+          <span style="color:var(--text-muted);">[ 10/10, High Run: 21, Strike: 1, Spare: 3 ]</span>
+          <span class="rank-plate r-adv-m" style="font-size:0.8rem;padding:2px 12px;">Advanced</span>
+        </div>
+        <div class="history-right">
+          <button onclick="toggleHistoryDetail(1)">View Details</button>
+          <button class="del" onclick="deleteSession('s_1791033917766')">Delete</button>
+        </div>
+      </div>
+      <div class="history-details" id="historyDetail_1">
+        <div class="bowlard-board"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">6</div><div class="bowlard-roll">/</div></div><div class="bowlard-frame-total">13</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">21</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">8</div><div class="bowlard-roll">1</div></div><div class="bowlard-frame-total">30</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">-</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">30</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div><div class="bowlard-roll">/</div></div><div class="bowlard-frame-total">42</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">49</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll high-run-fill">/</div></div><div class="bowlard-frame-total">69</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill">X</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">87</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill high-run">6</div><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total high-run">95</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls tenth"><div class="bowlard-roll">-</div><div class="bowlard-roll">-</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">95</div></div></div>
+        
+      </div>
+    </div><div class="history-item">
+      <div class="history-header">
+        <div class="history-left">
+          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/3/2026 09:21 PM (00:06)</span>
+          <span style="color:var(--text-muted);">Table: Default Table · TDF 0.85</span>
+          <span style="font-weight:600;">68 <span class="tdf-adj">(58)</span> point(s)</span>
+          <span style="color:var(--text-muted);">[ 10/10, Average: 6.8 <span class="tdf-adj">(6)</span> ]</span>
+          <span class="rank-plate r-beg-m" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
+        </div>
+        <div class="history-right">
+          <button onclick="toggleHistoryDetail(2)">View Details</button>
+          <button class="del" onclick="deleteSession('s_1791033715997')">Delete</button>
+        </div>
+      </div>
+      <div class="history-details" id="historyDetail_2">
+        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">1</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">11</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">13</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">17</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls"><div class="bowlard-roll">9</div></div><div class="bowlard-frame-total">Clean</div></div></div>
+        
+      </div>
+    </div><div class="history-item">
+      <div class="history-header">
+        <div class="history-left">
+          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/2/2026 08:50 PM (00:43)</span>
+          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
+          <span style="font-weight:600;">52 <span class="tdf-adj">(57)</span> point(s)</span>
+          <span style="color:var(--text-muted);">[ 7/10, Average: 7.4 <span class="tdf-adj">(8)</span> ]</span>
+          <span class="rank-plate r-int-m" style="font-size:0.8rem;padding:2px 12px;">Intermediate</span>
+        </div>
+        <div class="history-right">
+          <button onclick="toggleHistoryDetail(3)">View Details</button>
+          <button class="del" onclick="deleteSession('s_1790945432075')">Delete</button>
+        </div>
+      </div>
+      <div class="history-details" id="historyDetail_3">
+        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">6</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">18</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">13</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div></div><div class="bowlard-frame-total">Clean</div></div></div>
+        
+      </div>
+    </div><div class="history-item">
+      <div class="history-header">
+        <div class="history-left">
+          <span><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg> 10/2/2026 08:38 PM (01:19)</span>
+          <span style="color:var(--text-muted);">Table: Default Table · TDF 0.85</span>
+          <span style="font-weight:600;">53 <span class="tdf-adj">(45)</span> point(s)</span>
+          <span style="color:var(--text-muted);">[ 10/10, High Run: 8, Strike: 0, Spare: 0 ]</span>
+          <span class="rank-plate r-beg-m" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
+        </div>
+        <div class="history-right">
+          <button onclick="toggleHistoryDetail(4)">View Details</button>
+          <button class="del" onclick="deleteSession('s_1790944705478')">Delete</button>
+        </div>
+      </div>
+      <div class="history-details" id="historyDetail_4">
+        <div class="bowlard-board"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill high-run">8</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total high-run">8</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">13</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">18</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">23</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">28</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">33</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">38</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">43</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">48</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls tenth"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">53</div></div></div>
+        
+      </div>
+    </div></div>
+    <button class="btn-show-more" id="btnShowMore" data-i18n="showMoreSessions" style="display: block;">Show More</button>
+    
+    <div class="fgline">
+      <button id="btnExport" data-i18n="export" title="Export"><svg class="icon" aria-hidden="true"><use href="#upload"/></svg><span class="label">Export</span></button>
+      <button id="btnImport" data-i18n="import" title="Import"><svg class="icon" aria-hidden="true"><use href="#download"/></svg><span class="label">Import</span></button>
+      <button class="danger" id="btnReset" data-i18n="reset" title="Reset"><svg class="icon" aria-hidden="true"><use href="#trash"/></svg><span class="label">Reset</span></button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+      <button id="btnDeleteMenu" data-i18n="deleteMenu" aria-expanded="true"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete…</span><svg class="icon chev" aria-hidden="true"><use href="#chevron-up"/></svg></button>
+      <span id="deleteMenuGroup" style="display: inline-flex; gap: 12px; flex-wrap: wrap;">
+        <button class="danger" id="btnDeleteEmpty" data-i18n="deleteEmpty"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete Empty Sessions</span></button>
+        <button class="danger" id="btnDeleteUnfinished" data-i18n="deleteUnfinished"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete Unfinished Sessions</span></button>
+        <button class="danger" id="btnDeleteBowlardBelow" data-i18n="deleteBowlardBelow"><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg><span class="label">Delete Bowlard Sessions based on points</span></button>
+        <button class="danger" id="btnDeleteQSkillBelow" data-i18n="deleteQSkillBelow"><svg class="icon" aria-hidden="true"><use href="#target"/></svg><span class="label">Delete QSkill Sessions based on points</span></button>
+      </span>
+    </div>
+  </div>
+
+  <div class="duo-grid" id="bottomGrid">
+    <div class="card">
+      <h2><svg class="icon" aria-hidden="true"><use href="#link"/></svg> <span class="label" data-i18n="links">LINKS</span></h2>
+      <div class="links-list">
+        <a href="#" data-i18n="linkRules" style="display: none;">How to use</a>
+        <a href="#" data-i18n="linkRating" style="display: none;">Other Rating</a>
+        <a href="https://github.com/HoengSaan/billiard" data-i18n="linkGithub">Github</a>
+        <a href="https://yokohama-billiards.com/billiards-susume/rule-boulard">Bowlard [JP/日]</a>
+        <a href="https://drdavepoolinfo.com/instructional-articles/pb-review/hopkins-q-skills/">Hopkins Q-Skill [EN/英]</a>
+        <a href="https://drdavepoolinfo.com/faq/drill/rds/">Runout Drill System (RDS) [EN/英]</a>
+        <a href="https://drdavepoolinfo.com/faq/table/tdf/">Table Difficulty Factor (TDF) [EN/英]</a>
+        <a href="https://billiarduniversity.org/testing/ratings/">Score and Rating [EN/英]</a>
+        <a href="https://www.fargorate.com/">Fargo Rate [EN/英]</a>"
+      </div>
+    </div>
+    
+    <div class="card" id="tdf">
+      <div class="tdf-row">
+        <h2 data-i18n="tdfTitle">Table Difficulty Factor Calculator</h2>
+      </div>
+      <div class="tdf-calc">
+      <div class="tdf-row">
+          <div class="tdf-unit-toggle">
+            <label><input type="radio" name="tdfUnit" value="imperial" checked=""><span>in</span></label>
+            <label><input type="radio" name="tdfUnit" value="metric"><span>cm</span></label>
+          </div>
+          <div class="tdf-field">
+            <label data-i18n="tdfTableSize">Table Size</label>
+            <select id="tdfTableSize">
+              <option value="1.25">12 ft: 140" × 70" (355.6cm × 177.8cm)</option>
+              <option value="1.10">10 ft: 112" × 56" (284.5cm × 142.2cm)</option>
+              <option value="1.00" selected="">9 ft: 100" × 50" (254.0cm × 127.0cm)</option>
+              <option value="0.95">8 ft+: 92" × 46" (233.7cm × 116.8cm)</option>
+              <option value="0.90">8 ft: 88" × 44" (223.5cm × 111.7cm)</option>
+              <option value="0.85">7 ft: 84" × 42" (213.4cm × 106.7cm)</option>
+              <option value="0.85">6 ft: 72" × 42" (182.9cm × 91.4cm)</option>
+            </select>
+          </div>
+        </div>
+        <div class="tdf-row">
+          <div class="tdf-field"><label data-i18n="tdfMouth">Pocket Mouth</label><input type="text" id="tdfMouth" value="4 7/16"></div>
+          <div class="tdf-field"><label data-i18n="tdfThroat">Pocket Throat</label><input type="text" id="tdfThroat" value="3 7/8" style="opacity: 1;"></div>
+          <div class="tdf-field"><label data-i18n="tdfShelf">Shelf Depth</label><input type="text" id="tdfShelf" value="1 5/8"></div>
+          <div class="tdf-field"><label data-i18n="tdfAngle">Pocket Angle</label><input type="number" id="tdfAngle" step="0.5" value="140.0" min="130" max="150" disabled="" style="opacity: 0.4;"></div>
+        </div>
+        <div class="tdf-detail-grid" id="tdfDetailGrid" style="display:none;">
+          <div class="item"><div class="lbl">TSF</div><div class="val" id="tdfTSF">1.00</div></div>
+          <div class="item"><div class="lbl">PSF</div><div class="val" id="tdfPSF">1.00</div></div>
+          <div class="item"><div class="lbl">PAF</div><div class="val" id="tdfPAF">1.00</div></div>
+          <div class="item"><div class="lbl">PLF</div><div class="val" id="tdfPLF">1.00</div></div>
+        </div>
+        <div class="tdf-final">
+          <div>
+            <div class="big" id="tdfValue">1.00</div>
+          </div>
+          <div style="text-align:right; margin-left: auto;">
+            <div class="desc" id="tdfDesc" data-i18n="tdfAverage">Average</div>
+          </div>
+            <div class="tdf-unit-toggle">
+            <label class="radio-sec" style="cursor:pointer;">
+              <input type="radio" name="tdfDepthMode" value="shelf" checked="">
+              <span data-i18n="tdfThroat">Pocket Throat</span>
+            </label>
+            <label class="radio-sec" style="cursor:pointer;">
+              <input type="radio" name="tdfDepthMode" value="angle">
+              <span data-i18n="tdfAngle">Pocket Angle</span>
+            </label>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOCUS MODE: the stats + entry cards are moved in here while active -->
+  <div id="focusMode"></div>
+
+  </div>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+
+</body></html>

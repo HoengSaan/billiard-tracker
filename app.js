@@ -1,1106 +1,10 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
+/* ============================================================
+   app.js — application logic
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cue Skill · Tracker</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <!-- ============ ICON SPRITE (Lucide v1.55.0, ISC) ============ -->
-  <svg xmlns="http://www.w3.org/2000/svg" id="lucide-sprite" style="display:none" aria-hidden="true">
-    <!-- Lucide Icons v1.55.0 - https://lucide.dev - ISC License
-         Trimmed to only the symbols used by this project. -->
-    <defs>
-      <symbol id="moon" viewBox="0 0 24 24">
-        <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
-      </symbol>
-      <symbol id="sun" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2" />
-        <path d="M12 20v2" />
-        <path d="m4.93 4.93 1.41 1.41" />
-        <path d="m17.66 17.66 1.41 1.41" />
-        <path d="M2 12h2" />
-        <path d="M20 12h2" />
-        <path d="m6.34 17.66-1.41 1.41" />
-        <path d="m19.07 4.93-1.41 1.41" />
-      </symbol>
-      <symbol id="plus" viewBox="0 0 24 24">
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-      </symbol>
-      <symbol id="pencil" viewBox="0 0 24 24">
-        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-        <path d="m15 5 4 4" />
-      </symbol>
-      <symbol id="x" viewBox="0 0 24 24">
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </symbol>
-      <symbol id="play" viewBox="0 0 24 24">
-        <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
-      </symbol>
-      <symbol id="square" viewBox="0 0 24 24">
-        <rect width="18" height="18" x="3" y="3" rx="2" />
-      </symbol>
-      <symbol id="pause" viewBox="0 0 24 24">
-        <rect x="14" y="3" width="5" height="18" rx="1" />
-        <rect x="5" y="3" width="5" height="18" rx="1" />
-      </symbol>
-      <symbol id="eye" viewBox="0 0 24 24">
-        <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-        <circle cx="12" cy="12" r="3" />
-      </symbol>
-      <symbol id="eye-off" viewBox="0 0 24 24">
-        <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
-        <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
-        <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
-        <path d="m2 2 20 20" />
-      </symbol>
-      <symbol id="undo-2" viewBox="0 0 24 24">
-        <path d="M9 14 4 9l5-5" />
-        <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-      </symbol>
-      <symbol id="chevron-up" viewBox="0 0 24 24">
-        <path d="m18 15-6-6-6 6" />
-      </symbol>
-      <symbol id="chevron-down" viewBox="0 0 24 24">
-        <path d="m6 9 6 6 6-6" />
-      </symbol>
-      <symbol id="chart-column" viewBox="0 0 24 24">
-        <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-        <path d="M18 17V9" />
-        <path d="M13 17V5" />
-        <path d="M8 17v-3" />
-      </symbol>
-      <symbol id="circle-dot" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="1" />
-        <circle cx="12" cy="12" r="10" />
-      </symbol>
-      <symbol id="upload" viewBox="0 0 24 24">
-        <path d="M12 3v12" />
-        <path d="m17 8-5-5-5 5" />
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      </symbol>
-      <symbol id="download" viewBox="0 0 24 24">
-        <path d="M12 15V3" />
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <path d="m7 10 5 5 5-5" />
-      </symbol>
-      <symbol id="trash" viewBox="0 0 24 24">
-        <path d="M10 11v6" />
-        <path d="M14 11v6" />
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-        <path d="M3 6h18" />
-        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      </symbol>
-      <symbol id="eraser" viewBox="0 0 24 24">
-        <path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21" />
-        <path d="m5.082 11.09 8.828 8.828" />
-      </symbol>
-      <symbol id="target" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="6" />
-        <circle cx="12" cy="12" r="2" />
-      </symbol>
-      <symbol id="link" viewBox="0 0 24 24">
-        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-      </symbol>
-      <symbol id="maximize" viewBox="0 0 24 24">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-        <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-        <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-      </symbol>
-      <symbol id="minimize" viewBox="0 0 24 24">
-        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
-        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
-        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
-        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
-      </symbol>
-      <symbol id="info" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 16v-4" />
-        <path d="M12 8h.01" />
-      </symbol>
-      <symbol id="circle-check" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <path d="m16 9-5.5 5.5L8 12" />
-      </symbol>
-      <symbol id="triangle-alert" viewBox="0 0 24 24">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-        <path d="M12 9v4" />
-        <path d="M12 17h.01" />
-      </symbol>
-      <symbol id="circle-x" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <path d="m15 9-6 6" />
-        <path d="m9 9 6 6" />
-      </symbol>
-      <symbol id="arrow-right" viewBox="0 0 24 24">
-        <path d="M5 12h14" />
-        <path d="m12 5 7 7-7 7" />
-      </symbol>
-    </defs>
-  </svg>
-
-  <div class="app-grid" id="app">
-
-  <header class="card header">
-    <h1>🎱 Cue Skill · Tracker</h1>
-    <div class="header-controls">
-      <select id="langSelect">
-        <option value="en">English</option>
-        <option value="zh">官话</option>
-        <option value="zh_TW">官話</option>
-        <option value="yue">粵語</option>
-        <option value="jp">日本語</option>
-      </select>
-      <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><svg class="icon" aria-hidden="true"><use href="#moon"/></svg></button>
-    </div>
-  </header>
-
-  <!-- SETUP -->
-  <div class="card qskillbowlard">
-    <div class="setup-row">
-      <div class="field-group">
-        <label data-i18n="player">Player</label>
-        <select id="playerSelect"><option value="">--</option><option value="p_default">Default</option></select>
-        <button class="btn-icon" id="btnAddPlayer" title="Add Player"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button>
-        <button class="btn-icon" id="btnEditPlayer" title="Edit Player" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg></button>
-        <button class="btn-icon danger" id="btnDeletePlayer" title="Delete Player" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#x"/></svg></button>
-      </div>
-      <div class="field-group">
-        <label data-i18n="table">Table</label>
-        <select id="tableSelect"><option value="">--</option><option value="t_default">Default Table</option><option value="t_1790945127914">Manon</option></select>
-        <button class="btn-icon" id="btnAddTable" title="Add Table"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button>
-        <button class="btn-icon" id="btnEditTable" title="Edit Table" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg></button>
-        <button class="btn-icon danger" id="btnDeleteTable" title="Delete Table" style="display: inline-flex;"><svg class="icon" aria-hidden="true"><use href="#x"/></svg></button>
-      </div>
-      <div class="field-group">
-        <label data-i18n="mode">Mode</label>
-        <div class="radio-pri">
-          <label><input type="radio" name="gameMode" value="standard" checked=""><span data-i18n="modeStd">Q SKILL</span></label>
-          <label><input type="radio" name="gameMode" value="bowlard"><span data-i18n="modeBowl">BOWLARD</span></label>
-        </div>
-      </div>
-      <div class="field-group" id="sessionTypeGroup">
-        <label data-i18n="session">Session</label>
-        <div class="radio-pri">
-          <label><input type="radio" name="sessionType" value="5"><span>5</span></label>
-          <label><input type="radio" name="sessionType" value="10" checked=""><span>10</span></label>
-        </div>
-      </div>
-      <div class="field-group" id="bowlardInputModeGroup" style="display: none;">
-        <label data-i18n="inputMode">Input</label>
-        <div class="radio-pri">
-          <label><input type="radio" name="bowlardInputMode" value="perRoll" checked=""><span data-i18n="inputPerRoll">Per Roll</span></label>
-          <label><input type="radio" name="bowlardInputMode" value="cumulative"><span data-i18n="inputCumulative">Cumulative</span></label>
-        </div>
-      </div>
-      <div class="field-group">
-        <label data-i18n="target">Target</label>
-        <input type="number" id="targetScore" value="100" min="0" max="200">
-      </div>
-      <div class="field-group" id="tdfDisplayGroup">
-        <label>TDF</label>
-        <div class="radio-pri">
-          <label><input type="radio" name="tdfDisplay" value="adjusted" checked=""><span data-i18n="tdfAdjusted">Adjusted</span></label>
-          <label><input type="radio" name="tdfDisplay" value="raw"><span data-i18n="tdfRaw">Raw</span></label>
-        </div>
-      </div>
-      <button class="btn-pri" id="btnStart" data-i18n="start" style="margin-left: auto;"><svg class="icon" aria-hidden="true"><use href="#play"/></svg><span class="label">Start</span></button>
-    </div>
-  </div>
-
-  <!-- STATS -->
-  <div class="card stats-card qskillbowlard" id="statsCard" style="display:none;">
-    <div class="stats-grid">
-      <div class="stat-item"><span class="label" data-i18n="time">Time</span><span class="value" id="timerDisplay">00:00</span></div>
-      <div class="stat-item"><span class="value" id="inningDisplay">0/0</span></div>
-      <div class="stat-item"><span class="label" data-i18n="avg">Average</span><span class="value" id="avgDisplay">0.0</span></div>
-      <div class="stat-item" id="highStatItem" style="display: flex;"><span class="label" data-i18n="highRun">High Run</span><span class="value" id="highDisplay">0</span></div>
-      <div class="stat-item"><span class="label" data-i18n="score">Score</span><span class="value" id="scoreDisplay">0</span></div>
-    </div>
-    <!-- Compact one-line summary, shown on phones instead of the labelled grid -->
-    <div class="stats-compact" id="statsCompact">
-      <span class="compact-time" id="compactTime">00:00</span>
-      <span class="compact-sep">|</span>
-      <span class="compact-score" id="compactScore">0</span>
-      <span class="compact-sep">/</span>
-      <span class="compact-target" id="compactTarget">100</span>
-      <span class="compact-unit" data-i18n="pts">pts</span>
-    </div>
-    <div class="target-bar-wrap">
-      <div class="target-bar-labels">
-        <span data-i18n="targetProgress">Target Progress</span>
-        <span id="targetProgressText">0 / 100</span>
-      </div>
-      <div class="target-bar"><div class="target-bar-fill" id="targetBarFill"></div></div>
-    </div>
-    <div class="inning-chips" id="inningScores" style="display: grid;"></div>
-    <div class="bowlard-scorecard" id="bowlardScorecard" style="display:none;">
-      <div class="bowlard-board" id="bowlardBoard"></div>
-    </div>
-  </div>
-
-  <!-- ENTRY (Q SKILL + BOWLARD share one card; only the group swaps) -->
-  <div class="card" id="entryCard" style="display:none;">
-    <div class="card-header-row">
-      <div class="bowlard-entry-title" id="qskillEntryTitle">Inning 1 / 10</div>
-      <div class="bowlard-entry-title" id="bowlardEntryTitle" style="display:none;">Frame 1 · Roll 1</div>
-      <div class="card-actions">
-        <button class="btn-sm" data-action="focus" data-i18n="focusOn"><svg class="icon" aria-hidden="true"><use href="#eye"/></svg><span class="label">Focus</span></button>
-        <button class="btn-sm" data-action="hide" data-i18n="hide"><span class="label">Hide</span></button>
-        <button class="btn-sm" data-action="pause" data-i18n="pause"><span class="label">Pause</span></button>
-        <button class="btn-sm" data-action="undo" data-i18n="undo"><span class="label">Undo</span></button>
-      </div>
-    </div>
-    <div id="qskillEntryGroup">
-    <div class="score-grid desktop" id="scoreGridDesktop"><button class="score-btn zero-btn" data-score="0">0</button><button class="score-btn color-red" data-score="1">1</button><button class="score-btn color-red" data-score="2">2</button><button class="score-btn color-red" data-score="3">3</button><button class="score-btn color-red" data-score="4">4</button><button class="score-btn color-red" data-score="5">5</button><button class="score-btn color-red" data-score="6">6</button><button class="score-btn color-red" data-score="7">7</button><button class="score-btn color-red" data-score="8">8</button><button class="score-btn color-red" data-score="9">9</button><button class="score-btn color-purple" data-score="10">10</button><button class="score-btn color-blue" data-score="11">11</button><button class="score-btn color-blue" data-score="12">12</button><button class="score-btn color-blue" data-score="13">13</button><button class="score-btn color-blue" data-score="14">14</button><button class="score-btn color-blue" data-score="15">15</button><button class="score-btn color-blue" data-score="16">16</button><button class="score-btn color-blue" data-score="17">17</button><button class="score-btn color-blue" data-score="18">18</button><button class="score-btn color-blue" data-score="19">19</button><button class="score-btn color-gold" data-score="20">20</button></div>
-    <div class="score-grid mobile" id="scoreGridMobile"><button class="score-btn zero-btn" data-score="0">0</button><button class="score-btn color-red" data-score="1">1</button><button class="score-btn color-red" data-score="2">2</button><button class="score-btn color-red" data-score="3">3</button><button class="score-btn color-red" data-score="4">4</button><button class="score-btn color-red" data-score="5">5</button><button class="score-btn color-red" data-score="6">6</button><button class="score-btn color-red" data-score="7">7</button><button class="score-btn color-red" data-score="8">8</button><button class="score-btn color-red" data-score="9">9</button><button class="score-btn color-purple" data-score="10">10</button><button class="score-btn color-blue" data-score="11">11</button><button class="score-btn color-blue" data-score="12">12</button><button class="score-btn color-blue" data-score="13">13</button><button class="score-btn color-blue" data-score="14">14</button><button class="score-btn color-blue" data-score="15">15</button><button class="score-btn color-blue" data-score="16">16</button><button class="score-btn color-blue" data-score="17">17</button><button class="score-btn color-blue" data-score="18">18</button><button class="score-btn color-blue" data-score="19">19</button><button class="score-btn color-gold" data-score="20">20</button></div>
-    <div class="break-row" id="breakRow" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
-      <span style="color:var(--text-secondary); margin-right:4px;" data-i18n="break">Break</span>
-      <label class="radio-sec"><input type="radio" name="breakResult" value="clean" checked=""> <span data-i18n="clean">Clean</span></label>
-      <label class="radio-sec"><input type="radio" name="breakResult" value="scratch"> <span data-i18n="scratch">Scratch (-1)</span></label>
-      <label class="radio-sec"><input type="radio" name="breakResult" value="offTable"> <span data-i18n="offTable">Off Table (-2)</span></label>
-      <label class="radio-sec"><input type="radio" name="breakResult" value="reRack"> <span data-i18n="reRack">Re-rack (-1)</span></label>
-      <label class="radio-sec"><input type="checkbox" id="chkBallInHand"> <span data-i18n="ballInHand">Ball in Hand (-1)</span></label>
-    </div>
-    </div><!-- /#qskillEntryGroup -->
-
-    <div id="bowlardEntryGroup" style="display:none;">
-      <div class="bowlard-entry-grid" id="bowlardEntryGrid"></div>
-    </div>
-
-    <div id="detailSection">
-    <div class="detail-grid" id="detailsGrid">
-      <label class="detail-check always"><input type="checkbox" id="chkIllegalBreak"> <span data-i18n="illegalBreak">Illegal Break</span></label>
-      <label class="detail-check always"><input type="checkbox" id="chkBreakNoIn"> <span data-i18n="breakNoIn">Break No In</span></label>
-      <label class="detail-check always"><input type="checkbox" id="chkFluke"> <span data-i18n="fluke">Fluke</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkScratch"> <span data-i18n="mScratch">Scratch</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkOffTable"> <span data-i18n="mOffTable">Off Table</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkNoCushion"> <span data-i18n="noCushion">No Cushion</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkMiscue"> <span data-i18n="miscue">Miscue</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkDoubleTap"> <span data-i18n="doubleTap">Double Tap</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkOtherFouls"> <span data-i18n="otherFouls">Other Fouls</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkPositioning"> <span data-i18n="positioning">Positioning</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkSideSpin"> <span data-i18n="sideSpin">Side Spin</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkTopSpin"> <span data-i18n="topSpin">Top Spin</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkButtonSpin"> <span data-i18n="buttonSpin">Button Spin</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkHandBridge"> <span data-i18n="handBridge">Hand Bridge</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkMechanicalBridge"> <span data-i18n="mechBridge">Mech. Bridge</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkKick"> <span data-i18n="kick">Kick</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkBank"> <span data-i18n="bank">Bank</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkCut"> <span data-i18n="cut">Cut</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkCannon"> <span data-i18n="cannon">Cannon</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkKiss"> <span data-i18n="kiss">Kiss</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkCombo"> <span data-i18n="combo">Combo</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkLong"> <span data-i18n="long">Long</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkMasse"> <span data-i18n="masse">Masse</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkJump"> <span data-i18n="jump">Jump</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkCushion"> <span data-i18n="cushion">Cushion</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkSidePocket"> <span data-i18n="sidePocket">Side Pocket</span></label>
-      <label class="detail-check"><input type="checkbox" id="chkCornerPocket"> <span data-i18n="cornerPocket">Corner Pocket</span></label>
-    </div>
-    <button class="detail-toggle" id="detailsToggle" data-i18n="showMore">Show More</button>
-    </div><!-- /#detailSection -->
-  </div>
-
-  <!-- LIFETIME -->
-  <div class="card qskillbowlard" id="lifetimeCard">
-    <h2 data-i18n="lifetime">STATS</h2>
-    <div class="lifetime-grid">
-    <div class="lifetime-duo-box">
-      <div class="duo-stat">
-        <div class="number" id="lifetimeAvg">6.4</div>
-        <div class="sub" id="lblAvgLabel" data-i18n="avgLabel">Average</div>
-      </div>
-      <div class="duo-stat">
-        <div class="number" id="lifetimeHigh">18</div>
-        <div class="sub" data-i18n="highRun">High Run</div>
-      </div>
-      <div class="duo-stat">
-        <div class="number" id="lifetimeInnings">117</div>
-        <div class="sub" id="lblInningsLabel" data-i18n="inningsLabel">Total Innings</div>
-      </div>
-    </div>
-
-    <div class="lifetime-box">
-      <div class="number"><span class="rank-plate silver" id="lifetimeRank">Intermediate</span></div>
-      <div class="sub" data-i18n="rankLabel">Rank</div>
-      <div class="sub" id="lifetimeNextRank" style="margin-top:6px; font-size:1rem;"></div>
-    </div>
-
-    <div class="lifetime-box">
-      <div class="sub" data-i18n="commonFouls">Common Fouls</div>
-      <div class="detail-list" id="lifetimeFouls">Off Table (1)</div>
-      <div class="sub" style="margin-top:6px;" data-i18n="commonMistakes">Common Mistakes</div>
-      <div class="detail-list" id="lifetimeMistakes">No Record</div>
-    </div>
-  </div>
-    <button class="ranks-toggle" id="ranksToggle" data-i18n="showRanks">Show Rules &amp; Ranks</button>
-      <div id="infoWrap" style="display:none; margin-top:12px;">
-      <div class="duo-grid" style="margin-bottom:16px;">
-        <div class="card">
-          <h2><span data-i18n="modeStd">Q SKILL</span> <span data-i18n="rules">RULES</span></h2>
-          <ol>
-            <li data-i18n="rule1">Rack 15 balls on the Foot Spot, cue ball on the Kitchen. Call pocket needed.</li>
-            <li data-i18n="rule2">Break Penalty: Scratch (-1), cue ball Off Table (-2), Re-rack (-1)</li>
-            <li data-i18n="rule3">Ball In Hand: After the break, if player does not like the shot, player can move cue ball with 1 point subtracted.</li>
-            <li data-i18n="rule4">First 10 balls: 1pt each | Last 5 balls: 2pts each (needs to be pocketed in order, if pocket during the first 10 balls, it will be counted as 1pt)</li>
-            <li data-i18n="rule5">10 innings = 1 session, max 200 points. Innings end if the player failed to pocket a ball into a called pocket or commits a foul.</li>
-          </ol>
-        </div>
-        <div class="card">
-          <h2><span data-i18n="modeBowl">BOWLARD</span> <span data-i18n="rules">RULES</span></h2>
-          <ol>
-            <li data-i18n="brule1">Rack 10 balls on the Foot Spot, cue ball on the Kitchen. Call Shot needed.</li>
-            <li data-i18n="brule2">All balls worth 1 point and can be shot in any order.</li>
-            <li data-i18n="brule3">If player clears the table on 1st inning, it is a "Strike", you get 10 points, plus the points from your next 2 innings. If player clears the table on 2nd inning, it is a "Spare", you get 10 points, plus the points from your next inning.</li>
-            <li data-i18n="brule4">10 frames = 1 session, max 300 points. Player have 2 innings per frames. Innings end if the player failed to pocket a ball into a called pocket or commits a foul. Frame ends after 2 innings are finished or all balls are potted.</li>
-            <li data-i18n="brule5">10th Frame — Every strike or spare earns one bonus roll, and a new rack is set up whenever a strike or spare is completed. That gives you up to 3 rolls in the frame. If no strike or spare is earned, the frame ends like any other frame.</li>
-          </ol>
-        </div>
-      </div>
-      <table class="summary-table ranks-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th id="ranksColQSkill" data-i18n="rankColQSkill" class="col-active">Q Skill (avg/inning)</th>
-            <th id="ranksColBowlard" data-i18n="rankColBowlard">Bowlard (avg/session)</th>
-            <th data-i18n="rankColDesc">Description</th>
-          </tr>
-        </thead>
-        <tbody id="ranksTableBody"><tr>
-        <td><span class="rank-plate iron">Beginner</span></td>
-        <td class="col-active">~3.0</td>
-        <td>~29</td>
-        <td>Recreational Player. Looks uncordinated.</td>
-      </tr><tr>
-        <td><span class="rank-plate bronze">Novice</span></td>
-        <td class="col-active">3.1 ~ 6.0</td>
-        <td>30 ~ 59</td>
-        <td>Learning the basics of aiming and cue ball control.</td>
-      </tr><tr class="current">
-        <td><span class="rank-plate silver">Intermediate</span></td>
-        <td class="col-active">6.1 ~ 9.0</td>
-        <td>60 ~ 99</td>
-        <td>Basic potting, try to control the cue-ball; fewer easy misses.</td>
-      </tr><tr>
-        <td><span class="rank-plate gold">Advanced</span></td>
-        <td class="col-active">9.1 ~ 12.0</td>
-        <td>100 ~ 139</td>
-        <td>Strong potting and better cue-ball control; occasionally runs the table.</td>
-      </tr><tr>
-        <td><span class="rank-plate platinum">Lower Amateur</span></td>
-        <td class="col-active">12.1 ~ 16.0</td>
-        <td>140 ~ 179</td>
-        <td>Competitive amateur; occasionally table runs the table multiple time.</td>
-      </tr><tr>
-        <td><span class="rank-plate ruby">Upper Amateur</span></td>
-        <td class="col-active">16.1 ~ 18.0</td>
-        <td>180 ~ 209</td>
-        <td>Starting to reach the edge of professional level.</td>
-      </tr><tr>
-        <td><span class="rank-plate diamond">Professional</span></td>
-        <td class="col-active">18.1.0+</td>
-        <td>210+</td>
-        <td>Regional-level professional or stronger.</td>
-      </tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- HISTORY -->
-  <div class="card qskillbowlard" id="historyCard">
-    <h2 data-i18n="history">SESSION HISTORY</h2>
-    <div id="historyList"><div class="history-item">
-      <div class="history-header">
-        <div class="history-left">
-          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/3/2026 09:26 PM (00:03)</span>
-          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
-          <span style="font-weight:600;">40 <span class="tdf-adj">(44)</span> point(s)</span>
-          <span style="color:var(--text-muted);">[ 10/10, Average: 4.0 <span class="tdf-adj">(4)</span> ]</span>
-          <span class="rank-plate bronze" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
-        </div>
-        <div class="history-right">
-          <button onclick="toggleHistoryDetail(0)">View Details</button>
-          <button class="del" onclick="deleteSession('s_1791033983409')">Delete</button>
-        </div>
-      </div>
-      <div class="history-details" id="historyDetail_0">
-        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">4</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div></div><div class="bowlard-frame-total">Clean</div></div></div>
-        
-      </div>
-    </div><div class="history-item">
-      <div class="history-header">
-        <div class="history-left">
-          <span><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg> 10/3/2026 09:25 PM (00:20)</span>
-          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
-          <span style="font-weight:600;">95 <span class="tdf-adj">(104)</span> point(s)</span>
-          <span style="color:var(--text-muted);">[ 10/10, High Run: 21, Strike: 1, Spare: 3 ]</span>
-          <span class="rank-plate gold" style="font-size:0.8rem;padding:2px 12px;">Advanced</span>
-        </div>
-        <div class="history-right">
-          <button onclick="toggleHistoryDetail(1)">View Details</button>
-          <button class="del" onclick="deleteSession('s_1791033917766')">Delete</button>
-        </div>
-      </div>
-      <div class="history-details" id="historyDetail_1">
-        <div class="bowlard-board"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">6</div><div class="bowlard-roll">/</div></div><div class="bowlard-frame-total">13</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">21</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">8</div><div class="bowlard-roll">1</div></div><div class="bowlard-frame-total">30</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">-</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">30</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">4</div><div class="bowlard-roll">/</div></div><div class="bowlard-frame-total">42</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">49</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll high-run-fill">/</div></div><div class="bowlard-frame-total">69</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill">X</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">87</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill high-run">6</div><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total high-run">95</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls tenth"><div class="bowlard-roll">-</div><div class="bowlard-roll">-</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">95</div></div></div>
-        
-      </div>
-    </div><div class="history-item">
-      <div class="history-header">
-        <div class="history-left">
-          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/3/2026 09:21 PM (00:06)</span>
-          <span style="color:var(--text-muted);">Table: Default Table · TDF 0.85</span>
-          <span style="font-weight:600;">68 <span class="tdf-adj">(58)</span> point(s)</span>
-          <span style="color:var(--text-muted);">[ 10/10, Average: 6.8 <span class="tdf-adj">(6)</span> ]</span>
-          <span class="rank-plate bronze" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
-        </div>
-        <div class="history-right">
-          <button onclick="toggleHistoryDetail(2)">View Details</button>
-          <button class="del" onclick="deleteSession('s_1791033715997')">Delete</button>
-        </div>
-      </div>
-      <div class="history-details" id="historyDetail_2">
-        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">1</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">11</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">13</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">17</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls"><div class="bowlard-roll">9</div></div><div class="bowlard-frame-total">Clean</div></div></div>
-        
-      </div>
-    </div><div class="history-item">
-      <div class="history-header">
-        <div class="history-left">
-          <span><svg class="icon" aria-hidden="true"><use href="#chart-column"/></svg> 10/2/2026 08:50 PM (00:43)</span>
-          <span style="color:var(--text-muted);">Table: Manon · TDF 1.09</span>
-          <span style="font-weight:600;">52 <span class="tdf-adj">(57)</span> point(s)</span>
-          <span style="color:var(--text-muted);">[ 7/10, Average: 7.4 <span class="tdf-adj">(8)</span> ]</span>
-          <span class="rank-plate silver" style="font-size:0.8rem;padding:2px 12px;">Intermediate</span>
-        </div>
-        <div class="history-right">
-          <button onclick="toggleHistoryDetail(3)">View Details</button>
-          <button class="del" onclick="deleteSession('s_1790945432075')">Delete</button>
-        </div>
-      </div>
-      <div class="history-details" id="historyDetail_3">
-        <div class="bowlard-board qskill-timeline"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">6</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">2</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll high-run high-run-fill">18</div></div><div class="bowlard-frame-total high-run">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">13</div></div><div class="bowlard-frame-total">Clean</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">3</div></div><div class="bowlard-frame-total">Clean</div></div></div>
-        
-      </div>
-    </div><div class="history-item">
-      <div class="history-header">
-        <div class="history-left">
-          <span><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg> 10/2/2026 08:38 PM (01:19)</span>
-          <span style="color:var(--text-muted);">Table: Default Table · TDF 0.85</span>
-          <span style="font-weight:600;">53 <span class="tdf-adj">(45)</span> point(s)</span>
-          <span style="color:var(--text-muted);">[ 10/10, High Run: 8, Strike: 0, Spare: 0 ]</span>
-          <span class="rank-plate bronze" style="font-size:0.8rem;padding:2px 12px;">Novice</span>
-        </div>
-        <div class="history-right">
-          <button onclick="toggleHistoryDetail(4)">View Details</button>
-          <button class="del" onclick="deleteSession('s_1790944705478')">Delete</button>
-        </div>
-      </div>
-      <div class="history-details" id="historyDetail_4">
-        <div class="bowlard-board"><div class="bowlard-frame"><div class="bowlard-frame-num">1</div><div class="bowlard-rolls"><div class="bowlard-roll high-run-fill high-run">8</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total high-run">8</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">2</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">13</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">3</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">18</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">4</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">23</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">5</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">28</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">6</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">33</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">7</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">38</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">8</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">43</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">9</div><div class="bowlard-rolls"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div></div><div class="bowlard-frame-total">48</div></div><div class="bowlard-frame"><div class="bowlard-frame-num">10</div><div class="bowlard-rolls tenth"><div class="bowlard-roll">5</div><div class="bowlard-roll">-</div><div class="bowlard-roll empty"></div></div><div class="bowlard-frame-total">53</div></div></div>
-        
-      </div>
-    </div></div>
-    <button class="btn-show-more" id="btnShowMore" data-i18n="showMoreSessions" style="display: block;">Show More</button>
-    
-    <div class="fgline">
-      <button id="btnExport" data-i18n="export" title="Export"><svg class="icon" aria-hidden="true"><use href="#upload"/></svg><span class="label">Export</span></button>
-      <button id="btnImport" data-i18n="import" title="Import"><svg class="icon" aria-hidden="true"><use href="#download"/></svg><span class="label">Import</span></button>
-      <button class="danger" id="btnReset" data-i18n="reset" title="Reset"><svg class="icon" aria-hidden="true"><use href="#trash"/></svg><span class="label">Reset</span></button>
-      <input type="file" id="importFile" accept=".json" style="display:none">
-      <button id="btnDeleteMenu" data-i18n="deleteMenu" aria-expanded="true"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete…</span><svg class="icon chev" aria-hidden="true"><use href="#chevron-up"/></svg></button>
-      <span id="deleteMenuGroup" style="display: inline-flex; gap: 12px; flex-wrap: wrap;">
-        <button class="danger" id="btnDeleteEmpty" data-i18n="deleteEmpty"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete Empty Sessions</span></button>
-        <button class="danger" id="btnDeleteUnfinished" data-i18n="deleteUnfinished"><svg class="icon" aria-hidden="true"><use href="#eraser"/></svg><span class="label">Delete Unfinished Sessions</span></button>
-        <button class="danger" id="btnDeleteBowlardBelow" data-i18n="deleteBowlardBelow"><svg class="icon" aria-hidden="true"><use href="#circle-dot"/></svg><span class="label">Delete Bowlard Sessions based on points</span></button>
-        <button class="danger" id="btnDeleteQSkillBelow" data-i18n="deleteQSkillBelow"><svg class="icon" aria-hidden="true"><use href="#target"/></svg><span class="label">Delete QSkill Sessions based on points</span></button>
-      </span>
-    </div>
-  </div>
-
-  <div class="duo-grid">
-    <div class="card">
-      <h2><svg class="icon" aria-hidden="true"><use href="#link"/></svg> <span class="label" data-i18n="links">LINKS</span></h2>
-      <div class="links-list">
-        <a href="#" data-i18n="linkRules">How to use</a>
-        <a href="#" data-i18n="linkRating">Other Rating</a>
-        <a href="#" data-i18n="linkGithub">Github</a>
-      </div>
-    </div>
-    
-    <div class="card" id="tdf">
-      <div class="tdf-row">
-        <h2 data-i18n="tdfTitle">Table Difficulty Factor Calculator</h2>
-        <button style="margin-left: auto;" class="btn-sec" data-i18n="Howto" herf="">How to Use</button>
-      </div>
-      <div class="tdf-calc">
-      <div class="tdf-row">
-          <div class="tdf-unit-toggle">
-            <label><input type="radio" name="tdfUnit" value="imperial" checked=""><span>in</span></label>
-            <label><input type="radio" name="tdfUnit" value="metric"><span>cm</span></label>
-          </div>
-          <div class="tdf-field">
-            <label data-i18n="tdfTableSize">Table Size</label>
-            <select id="tdfTableSize">
-              <option value="1.25">12 ft: 140" × 70" (355.6cm × 177.8cm)</option>
-              <option value="1.10">10 ft: 112" × 56" (284.5cm × 142.2cm)</option>
-              <option value="1.00" selected="">9 ft: 100" × 50" (254.0cm × 127.0cm)</option>
-              <option value="0.95">8 ft+: 92" × 46" (233.7cm × 116.8cm)</option>
-              <option value="0.90">8 ft: 88" × 44" (223.5cm × 111.7cm)</option>
-              <option value="0.85">7 ft: 84" × 42" (213.4cm × 106.7cm)</option>
-              <option value="0.85">6 ft: 72" × 42" (182.9cm × 91.4cm)</option>
-            </select>
-          </div>
-        </div>
-        <div class="tdf-row">
-          <div class="tdf-field"><label data-i18n="tdfMouth">Pocket Mouth</label><input type="text" id="tdfMouth" value="4 7/16"></div>
-          <div class="tdf-field"><label data-i18n="tdfThroat">Pocket Throat</label><input type="text" id="tdfThroat" value="3 7/8" style="opacity: 1;"></div>
-          <div class="tdf-field"><label data-i18n="tdfShelf">Shelf Depth</label><input type="text" id="tdfShelf" value="1 5/8"></div>
-          <div class="tdf-field"><label data-i18n="tdfAngle">Pocket Angle</label><input type="number" id="tdfAngle" step="0.5" value="140.0" min="130" max="150" disabled="" style="opacity: 0.4;"></div>
-        </div>
-        <div class="tdf-detail-grid" id="tdfDetailGrid" style="display:none;">
-          <div class="item"><div class="lbl">TSF</div><div class="val" id="tdfTSF">1.00</div></div>
-          <div class="item"><div class="lbl">PSF</div><div class="val" id="tdfPSF">1.00</div></div>
-          <div class="item"><div class="lbl">PAF</div><div class="val" id="tdfPAF">1.00</div></div>
-          <div class="item"><div class="lbl">PLF</div><div class="val" id="tdfPLF">1.00</div></div>
-        </div>
-        <div class="tdf-final">
-          <div>
-            <div class="big" id="tdfValue">1.00</div>
-          </div>
-          <div style="text-align:right; margin-left: auto;">
-            <div class="desc" id="tdfDesc" data-i18n="tdfAverage">Average</div>
-          </div>
-            <div class="tdf-unit-toggle">
-            <label class="radio-sec" style="cursor:pointer;">
-              <input type="radio" name="tdfDepthMode" value="shelf" checked="">
-              <span data-i18n="tdfThroat">Pocket Throat</span>
-            </label>
-            <label class="radio-sec" style="cursor:pointer;">
-              <input type="radio" name="tdfDepthMode" value="angle">
-              <span data-i18n="tdfAngle">Pocket Angle</span>
-            </label>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOCUS MODE: the stats + entry cards are moved in here while active -->
-  <div id="focusMode"></div>
-
-  </div>
-
-<script>
-// ============================================================
-// TRANSLATIONS
-// ============================================================
-  const LANG = {
-    en: {
-      player: 'Player', table: 'Table', session: 'Session', target: 'Target', save: 'Save', cancel: 'Cancel', delete: 'Delete', confirm: 'Confirm?', tableName: 'Table Name', tableTdf: 'TDF (optional, 0.6316–2.6738)', deleteEmpty: 'Delete Empty Sessions',
-      deleteMenu:'Delete…',
-      deleteUnfinished: 'Delete Unfinished Sessions',
-      deleteBowlardBelow: 'Delete Bowlard Sessions based on points',
-      deleteQSkillBelow: 'Delete QSkill Sessions based on points',
-      enterThreshold: 'Enter score threshold (X)',
-      thresholdInvalid: 'Please enter a valid non-negative number',
-      deletingSessions: 'Delete {n} session(s)?',
-      deletedSessions: 'Deleted {n} session(s)',
-      noMatching: 'No matching sessions',
-      selectPlayerFirst: 'Please select a player first',
-      start: 'Start', end: 'End', time: 'Time', avg: 'Average', high: 'High', score: 'Score', point: 'point(s)',
-      hide: 'Hide', show: 'Show', pause: 'Pause', resume: 'Resume', undo: 'Undo',
-      Details: 'DETAILS', break: 'Break', clean: 'Clean', scratch: 'Scratch (-1)',
-      offTable: 'Off Table (-2)', reRack: 'Re-rack (-1)', fluke: 'Fluke',
-      illegalBreak: 'Illegal Break', breakNoIn: 'Break No In', ballInHand: 'Ball in Hand (-1)',
-      mScratch: 'Scratch', mOffTable: 'Off Table', noCushion: 'No Cushion', miscue: 'Miscue',
-      doubleTap: 'Double Tap', otherFouls: 'Other Fouls', positioning: 'Positioning',
-      sideSpin: 'Side Spin', topSpin: 'Top Spin', buttonSpin: 'Button Spin',
-      handBridge: 'Hand Bridge', mechBridge: 'Mech. Bridge', kick: 'Kick', bank: 'Bank',
-      cut: 'Cut', cannon: 'Cannon', kiss: 'Kiss', combo: 'Combo', long: 'Long',
-      masse: 'Masse', jump: 'Jump', cushion: 'Cushion', sidePocket: 'Side Pocket', cornerPocket: 'Corner Pocket',
-      showMore: 'Show More', showLess: 'Show Less', viewDetails: 'View Details', hideDetails: 'Hide Details',
-      lifetime: 'STATS', avgLabel: 'Average', rankLabel: 'Rank',
-      inningsLabel: 'Total Innings', commonFouls: 'Common Fouls', commonMistakes: 'Common Mistakes',
-      none: 'No Record', history: 'SESSION HISTORY', showMoreSessions: 'Show More',
-      rules: 'RULES', links: 'LINKS', linkRules: 'How to use', linkGithub: 'Github', linkRating: 'Other Rating',
-      export: 'Export', import: 'Import', reset: 'Reset',
-      showRanks:'Show Rules & Ranks', hideRanks:'Hide Rules & Ranks',
-      rankColQSkill:'Q Skill (avg/inning)', rankColBowlard:'Bowlard (avg/session)', rankColDesc:'Description',
-      rankDescBeg:'Recreational Player. Looks uncordinated.',
-      rankDescNov:'Learning the basics of aiming and cue ball control.',
-      rankDescInt:'Basic potting, try to control the cue-ball; fewer easy misses.',
-      rankDescAdv:'Strong potting and better cue-ball control; occasionally runs the table.',
-      rankDescLAma:'Competitive amateur; occasionally table runs the table multiple time.',
-      rankDescUAma:'Starting to reach the edge of professional level.',
-      rankDescPro:'Regional-level professional or stronger.',
-      rankBeg: 'Beginner', rankNov: 'Novice', rankInt: 'Intermediate',
-      rankAdv: 'Advanced', rankLAma: 'Lower Amateur', rankUAma: 'Upper Amateur',
-      rankPro: 'Professional', inputMode: 'Input', inputPerRoll: 'Per Roll', inputCumulative: 'Cumulative',
-      mode: 'Mode', modeStd: 'Q SKILL', modeBowl: 'BOWLARD', strike: 'Strike', spare: 'Spare',
-      targetProgress: 'Target Progress', tdfTitle: 'Table Difficulty Factor Calculator', Howto: 'How to Use',
-      tdfTableSize: 'Table Size', tdfMouth: 'Pocket Mouth', tdfThroat: 'Pocket Throat', tdfShelf: 'Shelf Depth', tdfAngle: 'Pocket Angle', tdfTooEasy: 'Too Easy', tdfVeryEasy: 'Very Easy', tdfEasy: 'Easy', tdfAverage: 'Average', tdfTough: 'Tough', tdfVeryTough: 'Very Tough', tdfTooTough: 'Too Tough',
-      frame: 'Frame', roll: 'Inning', bowlardComplete: 'Session Complete',
-      bowlardAvgLabel: 'Avg (Session)', bowlardInningsLabel: 'Total Games',
-      rule1: 'Rack 15 balls on the Foot Spot, cue ball on the Kitchen. Call pocket needed.',
-      rule2: 'Break Penalty: Scratch (-1), cue ball Off Table (-2), Re-rack (-1)',
-      rule3: 'Ball In Hand: After the break, if player does not like the shot, player can move cue ball with 1 point subtracted.',
-      rule4: 'First 10 balls: 1pt each | Last 5 balls: 2pts each (needs to be pocketed in order, if pocket during the first 10 balls, it will be counted as 1pt)',
-      rule5: '10 innings = 1 session, max 200 points. Innings end if the player failed to pocket a ball into a called pocket or commits a foul.',
-      brule1: 'Rack 10 balls on the Foot Spot, cue ball on the Kitchen. Call Shot needed.',
-      brule2: 'All balls worth 1 point and can be shot in any order.',
-      brule3: 'If player clears the table on 1st inning, it is a "Strike", you get 10 points, plus the points from your next 2 innings. If player clears the table on 2nd inning, it is a "Spare", you get 10 points, plus the points from your next inning.',
-      brule5: '10th Frame — Every strike or spare earns one bonus roll, and a new rack is set up whenever a strike or spare is completed. That gives you up to 3 rolls in the frame. If no strike or spare is earned, the frame ends like any other frame.',
-      brule4: '10 frames = 1 session, max 300 points. Player have 2 innings per frames. Innings end if the player failed to pocket a ball into a called pocket or commits a foul. Frame ends after 2 innings are finished or all balls are potted.',
-      ok: 'OK', yes: 'Yes', no: 'No',
-      playerExists: 'Player already exists',
-      tableExists: 'Table already exists',
-      selectPlayerWarn: 'Please select a player first',
-      selectTableWarn: 'Please select a table first',
-      noActiveSession: 'No active session',
-      sessionPausedWarn: 'Session is paused',
-      nothingToUndo: 'Nothing to undo',
-      undoSuccess: 'Undo successful',
-      sessionEnded: 'Session ended',
-      sessionStarted: 'Session started',
-      importSuccess: 'Import successful',
-      importInvalid: 'Invalid data file',
-      importFailed: 'Import failed',
-      resetDone: 'All data reset',
-      enterName: 'Please enter a name',
-      deleteSessionConfirm: 'Delete this session?',
-      deletePlayerConfirm: 'Delete this player? All their sessions will remain.',
-      deleteTableConfirm: 'Delete this table?',
-      resetConfirm: 'Reset ALL data? This cannot be undone.',
-      importConfirm: 'Import will replace ALL current data. Continue?',
-      undoConfirm: 'Undo the last entry?',
-      endSessionConfirm: 'End this session now?',
-      sessionSummary: 'Session Summary', current: 'Current', lastCol: 'Last', secondLast: '2nd Last',
-      threeTotal: '3 Session Total', averageCol: 'Average',
-      highRun: 'High Run', playTime: 'Play Time',
-      targetLine: 'Target: {t} · Achieved: {s} ({p}%)',
-      close: 'Close', closeWithSeconds: 'Close ({s}s)',
-      breakLine: 'Break', fouls: 'Fouls', mistakes: 'Mistakes',
-      addPlayerTitle: 'Add Player', editPlayerTitle: 'Edit Player',
-      addTableTitle: 'Add Table', editTableTitle: 'Edit Table',
-      tdfInvalid: 'Invalid Value',
-      tdfImpossible: 'Impossible TDF value',
-      tdfAdjusted: 'Adjusted', tdfRaw: 'Raw', sessionEmpty: 'Empty Session',
-      liveFoundTitle: 'Unfinished Session Found',
-      liveFoundMsg: 'You have a session in progress: {mode} · {progress} · {time}',
-      liveResume: 'Continue', liveEnd: 'End & Save', liveDiscard: 'Discard',
-      liveResumed: 'Session continued',
-      liveExistsWarn: 'A session is already in progress. Finish it first.',
-      focusOn: 'Focus', focusOff: 'Exit Focus', pts: 'pts',
-      sessionCompleteWarn: 'This session already has all its innings.',
-      sessionProgress: '{done}/{total}'
-    },
-    zh: {
-      player: '玩家', table: '球台', session: '局数', target: '目标', save: '确认', cancel: '取消', delete: '删除', confirm: '确认？', tableName: '球台名称', tableTdf: 'TDF（可选，0.6316–2.6738）', deleteEmpty: '删除空白记录',
-      deleteMenu:'删除…',
-      deleteUnfinished: '删除未完记录',
-      deleteBowlardBelow: '以分数为条件删除 Bowlard 记录',
-      deleteQSkillBelow: '以分数为条件删除 QSkill 记录',
-      enterThreshold: '输入分数下限 (X)',
-      thresholdInvalid: '请输入一个有效数字',
-      deletingSessions: '删除 {n} 条记录？',
-      deletedSessions: '已删除 {n} 条记录',
-      noMatching: '没有符合条件的记录',
-      selectPlayerFirst: '请先选择玩家',
-      start: '开始', end: '结束', time: '时间', avg: '平均', high: '最高', score: '分数', point: '分',
-      hide: '隐藏', show: '显示', pause: '暂停', resume: '继续', undo: '撤回',
-      Details: '记录', break: '开球', clean: '正常', scratch: '洗袋 (-1)',
-      offTable: '离台 (-2)', reRack: '重摆 (-1)', fluke: '运气球',
-      illegalBreak: '开球违例', breakNoIn: '开球未进', ballInHand: '自由球 (-1)',
-      mScratch: '洗袋', mOffTable: '离台', noCushion: '没吃库', miscue: '滑杆',
-      doubleTap: '二次击球', otherFouls: '其他犯规', positioning: '走位',
-      sideSpin: '侧旋', topSpin: '上旋', buttonSpin: '下旋',
-      handBridge: '手架', mechBridge: '架杆', kick: '勾球', bank: '翻袋',
-      cut: '切球', cannon: '开仑', kiss: '借下', combo: '组合球', long: '长台',
-      masse: '扎杆', jump: '跳球', cushion: '库边', sidePocket: '中袋', cornerPocket: '底袋',
-      showMore: '更多', showLess: '收起', viewDetails: '详细', hideDetails: '隐藏',
-      lifetime: '统计', avgLabel: '平均', rankLabel: '等级',
-      inningsLabel: '总局数', commonFouls: '常见犯规', commonMistakes: '常见失误',
-      none: '暂无记录', history: '历史记录', showMoreSessions: '显示更多',
-      rules: '规则', links: '链接', linkRules: '使用指南', linkGithub: 'Github', linkRating: '其他评级',
-      export: '导出', import: '导入', reset: '重置',
-      showRanks:'显示规则与等级', hideRanks:'收起规则与等级',
-      rankColQSkill:'Q Skill (每局平均)', rankColBowlard:'Bowlard (每场平均)', rankColDesc:'描述',
-      rankDescBeg:'娱乐玩家，动作不太协调。',
-      rankDescNov:'正在学习瞄准和基本杆法。',
-      rankDescInt:'进球稳定，尝试走位，低级失误减少。',
-      rankDescAdv:'进球能力强，开始会走位，不时能清台。',
-      rankDescLAma:'具备竞技水平的业余选手，不时能连续清台。',
-      rankDescUAma:'开始摸到职业的门槛。',
-      rankDescPro:'区域性职业选手或更强。',
-      rankBeg: '入门', rankNov: '初级', rankInt: '中级',
-      rankAdv: '上级', rankLAma: '业余', rankUAma: '半职业',
-      rankPro: '职业', inputMode: '输入', inputPerRoll: '单杆', inputCumulative: '累计',
-      mode: '模式', modeStd: 'Q SKILL', modeBowl: 'BOWLARD', strike: '全中', spare: '补中',
-      targetProgress: '目标进度', tdfTitle: '球台难度系数 (TDF) 计算器', Howto: '用法',
-      tdfTableSize: '球台尺寸', tdfMouth: '袋口', tdfThroat: '袋喉', tdfShelf: '深度', tdfAngle: '角度', tdfTooEasy: '太宽', tdfVeryEasy: '很宽', tdfEasy: '宽', tdfAverage: '普通', tdfTough: '窄', tdfVeryTough: '很窄', tdfTooTough: '太窄',
-      frame: '局', roll: '杆', bowlardComplete: '本场结束',
-      bowlardAvgLabel: '平均（场）', bowlardInningsLabel: '总场数',
-      rule1: '在脚点上摆放15颗球，母球置于线后。指定袋。',
-      rule2: '开球罚分：母球洗袋(-1)，母球离台(-2)，重摆(-1)',
-      rule3: '自由球：开球后，如果不喜欢当前球型，可移动母球并扣除1分。',
-      rule4: '前10颗球：每颗1分 | 最后5颗球：每颗2分（需按顺序击打，如在10颗球前入袋，则按1分计算）',
-      rule5: '10局为1场，最高200分。如未能将球打进指定袋口或犯规，则该局结束。',
-      brule1: '在脚点上摆放10颗球，母球置于线后。需指定袋。',
-      brule2: '所有球均为1分，可按任意顺序击打。',
-      brule3: '如玩家在第1次击球清台，为"全中"：得10分，加上随后2杆的分数。如在第2杆清台，称为"补中"：得10分，加上随后1杆的分数。',
-      brule5: '第10局 — 每次全中或补中都获得1次奖励杆，完成全中或补中后重新摆球。因此本局最多可打3杆。若未取得全中或补中，即与其他局一样正常结束。',
-      brule4: '10局为1场，最高300分。每局有2杆，未能将球打进指定袋口或犯规，则为1杆。两杆打完或清台后，该局结束。',
-      ok: '好', yes: '是', no: '否',
-      playerExists: '玩家已存在',
-      tableExists: '球台已存在',
-      selectPlayerWarn: '请先选择玩家',
-      selectTableWarn: '请先选择球台',
-      noActiveSession: '当前没有进行中的记录',
-      sessionPausedWarn: '记录已暂停',
-      nothingToUndo: '没有可撤回的记分',
-      undoSuccess: '已撤回',
-      sessionEnded: '本场结束',
-      sessionStarted: '本场开始',
-      importSuccess: '导入成功',
-      importInvalid: '数据文件无效',
-      importFailed: '导入失败',
-      resetDone: '所有数据已重置',
-      enterName: '请输入名称',
-      deleteSessionConfirm: '删除此记录？',
-      deletePlayerConfirm: '删除此玩家？其历史记录将保留。',
-      deleteTableConfirm: '删除此球台？',
-      resetConfirm: '重置所有数据？此操作不可撤销。',
-      importConfirm: '导入将覆盖所有现有数据，是否继续？',
-      undoConfirm: '撤回上一步？',
-      endSessionConfirm: '是否结束本场记录？',
-      sessionSummary: '本场总结', current: '本场', lastCol: '上一场', secondLast: '上上场',
-      threeTotal: '三场总结', averageCol: '平均',
-      highRun: '高分', playTime: '时长',
-      targetLine: '目标: {t} · 达成: {s} ({p}%)',
-      close: '关闭', closeWithSeconds: '关闭 ({s}秒)',
-      breakLine: '开球', fouls: '犯规', mistakes: '失误',
-      addPlayerTitle: '新增玩家', editPlayerTitle: '编辑玩家',
-      addTableTitle: '新增球台', editTableTitle: '编辑球台',
-      tdfInvalid: '无效数值',
-      tdfImpossible: '不可能的 TDF 值',
-      tdfAdjusted: '调整后', tdfRaw: '原始', sessionEmpty: '空白记录',
-      liveFoundTitle: '发现未完成的记录',
-      liveFoundMsg: '你有一场进行中的记录：{mode} · {progress} · {time}',
-      liveResume: '继续', liveEnd: '结束并存档', liveDiscard: '舍弃',
-      liveResumed: '已继续本场记录',
-      liveExistsWarn: '已有进行中的记录，请先结束它。',
-      focusOn: '专注', focusOff: '退出专注', pts: '分',
-      sessionCompleteWarn: '这场记录的局数已满。',
-      sessionProgress: '{done}/{total}'
-    },
-    zh_TW: {
-      player: '玩家', table: '球檯', session: '局數', target: '目標', save: '確認', cancel: '取消', delete: '删除', confirm: '確認？', tableName: '球檯名稱', tableTdf: 'TDF（可選，0.6316–2.6738）', deleteEmpty: '删除空白記錄',
-      deleteMenu:'删除…',
-      deleteUnfinished: '删除未完記錄',
-      deleteBowlardBelow: '以分數爲條件删除 Bowlard 記錄',
-      deleteQSkillBelow: '以分數爲條件删除 QSkill 記錄',
-      enterThreshold: '輸入分數下限 (X)',
-      thresholdInvalid: '請輸入一個有效數字',
-      deletingSessions: '刪除 {n} 條記錄？',
-      deletedSessions: '已刪除 {n} 條記錄',
-      noMatching: '沒有符合條件的記錄',
-      selectPlayerFirst: '請先選擇玩家',
-      start: '開始', end: '結束', time: '時間', avg: '平均', high: '最高', score: '分數', point: '分',
-      hide: '隱藏', show: '顯示', pause: '暫停', resume: '繼續', undo: '撤回',
-      Details: '記錄', break: '衝球', clean: '正常', scratch: '洗袋 (-1)',
-      offTable: '離檯 (-2)', reRack: '重擺 (-1)', fluke: '運氣球',
-      illegalBreak: '衝球違例', breakNoIn: '衝球未進', ballInHand: '自由球 (-1)',
-      mScratch: '洗袋', mOffTable: '離檯', noCushion: '未碰顆星', miscue: '滑桿',
-      doubleTap: '二次擊球', otherFouls: '其他犯規', positioning: '做球',
-      sideSpin: '下塞', topSpin: '高桿', buttonSpin: '低桿',
-      handBridge: '手架', mechBridge: '架桿', kick: '解球', bank: '灌袋',
-      cut: '切球', cannon: '開侖', kiss: '借入', combo: '組合球', long: '長檯',
-      masse: '曲球', jump: '跳球', cushion: '貼壁', sidePocket: '中袋', cornerPocket: '底袋',
-      showMore: '更多', showLess: '收起', viewDetails: '詳細', hideDetails: '隱藏',
-      lifetime: '統計', avgLabel: '平均', rankLabel: '等級',
-      inningsLabel: '總局數', commonFouls: '常見犯規', commonMistakes: '常見失誤',
-      none: '暫無記錄', history: '歷史記錄', showMoreSessions: '顯示更多',
-      rules: '規則', links: '鏈結', linkRules: '使用指南', linkGithub: 'Github', linkRating: '其他評級',
-      export: '匯出', import: '匯入', reset: '重設',
-      showRanks:'顯示規則與等級', hideRanks:'收起規則與等級',
-      rankColQSkill:'Q Skill (每局平均)', rankColBowlard:'Bowlard (每場平均)', rankColDesc:'描述',
-      rankDescBeg:'娛樂玩家，動作不太協調。',
-      rankDescNov:'正在學習瞄準和基本桿法。',
-      rankDescInt:'進球穩定，嘗試走位，低級失誤減少。',
-      rankDescAdv:'進球能力強，開始會走位，不時能清檯。',
-      rankDescLAma:'具備競技水準的業餘選手，不時能連續清檯。',
-      rankDescUAma:'開始摸到職業的門檻。',
-      rankDescPro:'區域性職業選手或更強。',
-      rankBeg: '入門', rankNov: '初級', rankInt: '中級',
-      rankAdv: '上級', rankLAma: '業餘', rankUAma: '半職業',
-      rankPro: '職業', inputMode: '輸入', inputPerRoll: '單桿', inputCumulative: '累計',
-      mode: '模式', modeStd: 'Q SKILL', modeBowl: 'BOWLARD', strike: '全中', spare: '補中',
-      targetProgress: '目標進度', tdfTitle: '球檯難度係數 (TDF) 計算器', Howto: '用法',
-      tdfTableSize: '球檯尺寸', tdfMouth: '袋口', tdfThroat: '袋喉', tdfShelf: '深度', tdfAngle: '角度', tdfTooEasy: '太寬', tdfVeryEasy: '很寬', tdfEasy: '寬', tdfAverage: '普通', tdfTough: '窄', tdfVeryTough: '很窄', tdfTooTough: '太窄',
-      frame: '局', roll: '桿', bowlardComplete: '本場結束',
-      bowlardAvgLabel: '平均（場）', bowlardInningsLabel: '總場數',
-      rule1: '在腳點上擺放15顆球，母球置於線後。指定袋。',
-      rule2: '衝球罰分：母球洗袋(-1)，母球離桌(-2)，重新排球(-1)',
-      rule3: '自由球：衝球後，如果不喜歡當前球型，可移動母球並扣除1分。',
-      rule4: '前10顆球：每顆1分 | 最後5顆球：每顆2分（需按順序擊打，如在10顆球前入袋，則按1分計算）',
-      rule5: '10局為1場，最高200分。如未能將球打進指定袋口或犯規，則該局結束。',
-      brule1: '在腳點上擺放10顆球，母球置於線後。指定袋。',
-      brule2: '所有球均為1分，可按任意順序擊打。',
-      brule3: '如玩家在第1桿清檯，為「全中」：得10分，加上隨後2桿的分數。如在第2桿清檯，為「補中」：得10分，加上隨後1桿的分數。',
-      brule5: '第10局 — 每次全中或補中都獲得1次獎勵桿，完成全中或補中後重新擺球。因此本局最多可打3桿。若未取得全中或補中，則與其他局一樣正常結束。',
-      brule4: '10局為1場，最高300分。每局有2桿。如未能將球打進指定袋口或犯規，則爲1桿。兩桿打完或清檯，該局結束。',
-      ok: '好', yes: '是', no: '否',
-      playerExists: '玩家已存在',
-      tableExists: '球檯已存在',
-      selectPlayerWarn: '請先選擇玩家',
-      selectTableWarn: '請先選擇球檯',
-      noActiveSession: '目前沒有進行中的記錄',
-      sessionPausedWarn: '記錄已暫停',
-      nothingToUndo: '沒有可撤回的記分',
-      undoSuccess: '已撤回',
-      sessionEnded: '本場結束',
-      sessionStarted: '本場開始',
-      importSuccess: '匯入成功',
-      importInvalid: '資料檔案無效',
-      importFailed: '匯入失敗',
-      resetDone: '所有資料已重設',
-      enterName: '請輸入名稱',
-      deleteSessionConfirm: '刪除此記錄？',
-      deletePlayerConfirm: '刪除此玩家？其歷史記錄將保留。',
-      deleteTableConfirm: '刪除此球檯？',
-      resetConfirm: '重設所有資料？此操作無法復原。',
-      importConfirm: '匯入將覆蓋所有現有資料，是否繼續？',
-      undoConfirm: '撤回上一步？',
-      endSessionConfirm: '是否結束本場記録？',
-      sessionSummary: '本場總結', current: '本場', lastCol: '上一場', secondLast: '上上場',
-      threeTotal: '三場總結', averageCol: '平均',
-      highRun: '高分', playTime: '時長',
-      targetLine: '目標: {t} · 達成: {s} ({p}%)',
-      close: '關閉', closeWithSeconds: '關閉 ({s}秒)',
-      breakLine: '衝球', fouls: '犯規', mistakes: '失誤',
-      addPlayerTitle: '新增玩家', editPlayerTitle: '編輯玩家',
-      addTableTitle: '新增球檯', editTableTitle: '編輯球檯',
-      liveFoundTitle: '發現未完成的記錄',
-      liveFoundMsg: '你有一場進行中的記錄：{mode} · {progress} · {time}',
-      liveResume: '繼續', liveEnd: '結束並存檔', liveDiscard: '捨棄',
-      liveResumed: '已繼續本場記錄',
-      liveExistsWarn: '已有進行中的記錄，請先結束它。',
-      focusOn: '專注', focusOff: '退出專注', pts: '分',
-      sessionCompleteWarn: '這場記錄的局數已滿。',
-      sessionProgress: '{done}/{total}',
-      tdfInvalid: '無效數值',
-      tdfImpossible: '不可能的 TDF 值',
-      tdfAdjusted: '調整後', tdfRaw: '原始', sessionEmpty: '空白記錄'
-    },
-    yue: {
-      player: '玩家', table: '波檯', session: '板數', target: '目標', save: '確認', cancel: '取消', delete: '删除', confirm: '確認？', tableName: '波檯名稱', tableTdf: 'TDF（可選，0.6316–2.6738）', deleteEmpty: '删除空白記錄',
-      deleteMenu:'删除…',
-      deleteUnfinished: '刪除未完記錄',
-      deleteBowlardBelow: '以分數爲條件删除 Bowlard 記錄',
-      deleteQSkillBelow: '以分數爲條件删除 QSkill 記錄',
-      enterThreshold: '輸入分數下限 (X)',
-      thresholdInvalid: '請輸入一個有效嘅數字',
-      deletingSessions: '刪除 {n} 條記錄？',
-      deletedSessions: '已刪除 {n} 條記錄',
-      noMatching: '冇符合條件嘅記錄',
-      selectPlayerFirst: '請揀玩家',
-      start: '開始', end: '結束', time: '時間', avg: '平均', high: '最高', score: '度數', point: '度',
-      hide: '隱藏', show: '顯示', pause: '暫停', resume: '重開', undo: '撤回',
-      Details: '記錄', break: '開波', clean: '正常', scratch: '𢴈死 (-1)',
-      offTable: '出街 (-2)', reRack: '重砌 (-1)', fluke: '豬波',
-      illegalBreak: '開波違例', breakNoIn: '開波無入', ballInHand: '飛波 (-1)',
-      mScratch: '𢴈死', mOffTable: '出街', noCushion: '無黐箍', miscue: '撻Cue',
-      doubleTap: 'Double Tap', otherFouls: '其他犯規', positioning: '走位',
-      sideSpin: '西', topSpin: '高Cue', buttonSpin: '低Cue',
-      handBridge: '手架', mechBridge: '叉', kick: 'Kick波', bank: '反袋',
-      cut: 'Cut波', cannon: '抽波', kiss: '借入', combo: '隔山打牛', long: '長檯',
-      masse: '戙西', jump: '跳波', cushion: '黐箍', sidePocket: '中袋', cornerPocket: '尾袋',
-      showMore: '更多', showLess: '摺埋', viewDetails: '詳細', hideDetails: '隱藏',
-      lifetime: '統計', avgLabel: '平均', rankLabel: '等級',
-      inningsLabel: '總板數', commonFouls: '常見犯規', commonMistakes: '常見失誤',
-      none: '未有記錄', history: '歷史記錄', showMoreSessions: '顯示更多',
-      rules: '規則', links: '鏈結', linkRules: '使用指南', linkGithub: 'Github', linkRating: '其他評級',
-      export: '匯出', import: '匯入', reset: '重設',
-      showRanks:'顯示規則同等級', hideRanks:'收起規則同等級',
-      rankColQSkill:'Q Skill (每局平均)', rankColBowlard:'Bowlard (每場平均)', rankColDesc:'描述',
-      rankDescBeg:'娛樂玩家，動作唔係幾協調。',
-      rankDescNov:'學緊瞄準同基本Cue法。',
-      rankDescInt:'入波穩定，嘗試較波，低級失誤少的。',
-      rankDescAdv:'入波比較準，識較波，間唔中清到檯。',
-      rankDescLAma:'業餘競技水平，間唔中可以連續清檯。',
-      rankDescUAma:'開始摸到職業嘅門檻。',
-      rankDescPro:'區域性職業選手或更強。',
-      rankBeg: '入門', rankNov: '初級', rankInt: '中級',
-      rankAdv: '上級', rankLAma: '業餘', rankUAma: '半職業',
-      rankPro: '職業', inputMode: '輸入', inputPerRoll: '一槍', inputCumulative: '累計',
-      mode: '模式', modeStd: 'Q SKILL', modeBowl: 'BOWLARD', strike: '全中', spare: '補中',
-      targetProgress: '目標進度', tdfTitle: '波檯難度系數 (TDF) 計數機', Howto: '用法',
-      tdfTableSize: '波檯尺寸', tdfMouth: '袋口', tdfThroat: '袋喉', tdfShelf: '深度', tdfAngle: '角度', tdfTooEasy: '太闊', tdfVeryEasy: '好闊', tdfEasy: '闊', tdfAverage: '普通', tdfTough: '窄', tdfVeryTough: '好窄', tdfTooTough: '太窄',
-      frame: '板', roll: '槍', bowlardComplete: '本場結束',
-      bowlardAvgLabel: '平均（局）', bowlardInningsLabel: '總局數',
-      rule1: '喺腳點上擺15粒球，Cue Ball放喺線後。叫袋。',
-      rule2: '開波罰分：𢴈死(-1)，出街(-2)，重砌(-1)',
-      rule3: '飛球：開波之後，若果唔鍾意當前球型，可移動Cue波並罰1度。',
-      rule4: '前10粒波：每粒1度 | 最後5粒波：每粒2度（按順序打，如在10粒球前入袋，則按1度計）',
-      rule5: '10板爲1局，最高200度。若未能將波打入指定袋口或犯規，即爲一板。',
-      brule1: '喺腳點上擺10粒波，Cue Ball放喺線後。叫袋。',
-      brule2: '所有波都係1度，可按任意次序打。',
-      brule3: '若果第1槍清檯，叫做「全中」：10度，加埋後邊2槍嘅度數。若果第2槍清檯，叫做「補中」：10度，加埋後邊1槍嘅度數。',
-      brule4: '10板爲1場，最高300度。每板有2槍。若未能將波打入指定袋口或犯規，即爲一槍。兩槍打完或清檯後，該板結束。',
-      brule5: '第10板 — 每次全中或者補中都獲得1次獎勵槍，完成全中或者補中之後重新砌波。所以呢一板最多可以打3槍。若果無全中或者補中，咁就同其他一樣正常結束。',
-      ok: '好', yes: '是', no: '否',
-      playerExists: '玩家已存在',
-      tableExists: '波檯已存在',
-      selectPlayerWarn: '請揀玩家',
-      selectTableWarn: '請揀波檯',
-      noActiveSession: '目前無進行任何記錄',
-      sessionPausedWarn: '記錄已暫停',
-      nothingToUndo: '無可撤回之記分',
-      undoSuccess: '已撤回',
-      sessionEnded: '本場結束',
-      sessionStarted: '本場開始',
-      importSuccess: '匯入成功',
-      importInvalid: '資料檔案無效',
-      importFailed: '匯入失敗',
-      resetDone: '所有資料已重設',
-      enterName: '請輸入名稱',
-      deleteSessionConfirm: '刪除此記錄？',
-      deletePlayerConfirm: '刪除此玩家？其歷史記錄將保留。',
-      deleteTableConfirm: '刪除此球檯？',
-      resetConfirm: '重設所有資料？此操作無法復原。',
-      importConfirm: '匯入將覆蓋所有現有資料，是否繼續？',
-      undoConfirm: '撤回上一步？',
-      endSessionConfirm: '是否結束本場記録？',
-      sessionSummary: '本場總結', current: '本場', lastCol: '上一局', secondLast: '上上局',
-      threeTotal: '三局總結', averageCol: '平均',
-      highRun: '高分', playTime: '時長',
-      targetLine: '目標: {t} · 達到: {s} ({p}%)',
-      close: '閂', closeWithSeconds: '閂 ({s}秒)',
-      breakLine: '開波', fouls: '犯規', mistakes: '失誤',
-      addPlayerTitle: '新增玩家', editPlayerTitle: '編輯玩家',
-      addTableTitle: '新增波檯', editTableTitle: '編輯波檯',
-      liveFoundTitle: '發現未完成嘅記錄',
-      liveFoundMsg: '你有一場進行緊嘅記錄：{mode} · {progress} · {time}',
-      liveResume: '繼續', liveEnd: '結束並儲存', liveDiscard: '捨棄',
-      liveResumed: '已繼續呢場記錄',
-      liveExistsWarn: '已經有進行緊嘅記錄，請先結束佢。',
-      focusOn: '專注', focusOff: '退出專注', pts: '分',
-      sessionCompleteWarn: '呢場記錄嘅局數已經滿咗。',
-      sessionProgress: '{done}/{total}',
-      tdfInvalid: '無效數值',
-      tdfImpossible: '不可能嘅 TDF 值',
-      tdfAdjusted: '調整後', tdfRaw: '原始', sessionEmpty: '空白記錄'
-    },
-    jp: {
-      player: 'プレイヤー', table: 'テーブル', session: 'セッション', target: '目標', save: '保存', cancel: 'キャンセル', delete: '削除', confirm: '確認しますか？', tableName: 'テーブル名', tableTdf: 'TDF（任意、0.6316–2.6738）', deleteEmpty: '空白のデータを削除',
-      deleteMenu:'削除…',
-      deleteUnfinished: '休憩中のデータを削除',
-      deleteBowlardBelow: 'Bowlard・点数でデータを削除',
-      deleteQSkillBelow: 'QSkill・点数でデータを削除',
-      enterThreshold: 'スコア閾値 (X) を入力',
-      thresholdInvalid: '有効な数値を入力してください',
-      deletingSessions: '{n} 件のデータを削除しますか',
-      deletedSessions: '{n} 件のデータを削除しました',
-      noMatching: '該当するデータがありません',
-      selectPlayerFirst: '先にプレイヤーを選択してください',
-      start: '開始', end: '終了', time: '時間', avg: '平均', high: '最高', score: 'スコア', point: '点',
-      hide: '非表示', show: '表示', pause: '一時停止', resume: '再開', undo: '元に戻す',
-      Details: '記録', break: 'ブレイク', clean: '通常', scratch: 'スクラッチ (-1)',
-      offTable: '場外 (-2)', reRack: 'リラック (-1)', fluke: 'フルーク',
-      illegalBreak: 'ｲﾘｰｶﾞﾙﾌﾞﾚｲｸ', breakNoIn: 'ﾌﾞﾚｲｸﾉｰｲﾝ', ballInHand: 'ﾌﾘｰﾎﾞｰﾙ (-1)',
-      mScratch: 'スクラッチ', mOffTable: '球場外', noCushion: 'ノークッション', miscue: 'ミスキュー',
-      doubleTap: '2度撞き', otherFouls: 'その他のﾌｧｳﾙ', positioning: 'ポジション取り',
-      sideSpin: '捻り', topSpin: '上撞き', buttonSpin: '下撞き',
-      handBridge: 'ハンドブリッジ', mechBridge: 'レスト', kick: '空コ', bank: 'バンク',
-      cut: '薄球', cannon: 'キャロム', kiss: 'キス', combo: 'コンビ', long: 'ロング',
-      masse: 'マッセ', jump: 'ジャンプ', cushion: 'クッション', sidePocket: 'サイドポケット', cornerPocket: 'コーナーポケット',
-      showMore: 'もっと見る', showLess: '閉じる', viewDetails: '詳細を表示', hideDetails: '詳細を非表示',
-      lifetime: 'まとめ', avgLabel: '平均', rankLabel: 'ランク',
-      inningsLabel: '総イニング数', commonFouls: 'よくあるファウル', commonMistakes: 'よくあるミス',
-      none: '記録なし', history: 'データ管理', showMoreSessions: 'もっと見る',
-      rules: 'ルール', links: 'リンク', linkRules: '使い方', linkGithub: 'Github', linkRating: 'その他のレーティング',
-      export: 'エクスポート', import: 'インポート', reset: 'リセット',
-      showRanks:'ルールとランクを表示', hideRanks:'ルールとランクランクを非表示',
-      rankColQSkill:'Q Skill (イニング平均)', rankColBowlard:'ボウラード (セッション平均)', rankColDesc:'説明',
-      rankDescBeg:'レクリエーションプレイヤー。動作はまだぎこちない。',
-      rankDescNov:'狙い方と基本的なキュー技術を習得中。',
-      rankDescInt:'簡単なショートは基本入れる、手球コントロールに意識を。イージーミスが減る。',
-      rankDescAdv:'狙いが安定になっている、手球コントロールが確実。偶にマスワリ。',
-      rankDescLAma:'地方大会に出るレベル。時々マスワリ。',
-      rankDescUAma:'プロに極めて近し存在。',
-      rankDescPro:'地域レベルのプロ、またはそれ以上。',
-      rankBeg: 'ﾋﾞｷﾞﾅｰ', rankNov: '初級', rankInt: '中級',
-      rankAdv: '上級', rankLAma: 'ｱﾏﾁｭｱ初級', rankUAma: 'ｱﾏﾁｭｱ上級',
-      rankPro: 'プロ', inputMode: '入力', inputPerRoll: 'イニング', inputCumulative: '累計',
-      mode: 'モード', modeStd: 'Q SKILL', modeBowl: 'ボウラード', strike: 'ストライク', spare: 'スペア',
-      targetProgress: '目標進捗', tdfTitle: 'テーブル難易度係数 (TDF) 計算機', Howto: '使い方',
-      tdfTableSize: 'テーブルサイズ', tdfMouth: 'ポケット口', tdfThroat: 'ポケット喉', tdfShelf: '深さ', tdfAngle: '角度', tdfTooEasy: '広すぎ', tdfVeryEasy: 'とても広い', tdfEasy: '広い', tdfAverage: '普通', tdfTough: '狭い', tdfVeryTough: 'とても狭い', tdfTooTough: '狭すぎ',
-      frame: 'フレーム', roll: 'イニング', bowlardComplete: 'セッション終了',
-      bowlardAvgLabel: '平均（セッション）', bowlardInningsLabel: 'セッション数',
-      rule1: 'フットスポットに15個の的球をラックし、手球はキッチン内に置く。コールショット必須。',
-      rule2: 'ブレイクペナルティ：スクラッチ (-1)、オフテーブル (-2)、組みなおし (-1)',
-      rule3: 'フリーボール：ブレイク後、プレイヤーがショットを好まない場合、1点減点で手球を移動できる。',
-      rule4: '最初の10球：各1点｜最後の5球：各2点（順番にポケットする必要があり、最初の10球の時点に入った場合は1点となる）',
-      rule5: '10イニング＝1セッション、最大200点。ショートミス（ミスコール含め）、もしくはファウルをした場合、イニングは終了する。',
-      brule1: 'フットスポットに10個の的球をラックし、手球はキッチン内に置く。コールショット必須。',
-      brule2: '全ての球は1点で、任意の順番で撞いてよい。',
-      brule3: '1イニング目でクリアすれば「ストライク」：10点＋次の2イニングでポケットした球数。2イニング目でクリアすれば「スペア」：10点＋次の1イニングでポケットした球数。',
-      brule5: '第10フレーム — ストライクまたはスペアのたびにボーナスイニングが1回与えられ、ストライクまたはスペアを取った時点でリラックします。3イニングまで打てます。ストライクもスペアも取れなければ、通常のフレームと同じように終了します。',
-      brule4: '10フレーム＝1セッション、最大300点。1フレーム2イニング。ショートミス（ミスコール含め）、もしくはファウルをした場合、イニングは終了する。2イニング目終了、または全ての球をポケットしたらフレーム終了。',
-      ok: 'OK', yes: 'はい', no: 'いいえ',
-      playerExists: 'プレイヤーは既に存在します',
-      tableExists: 'テーブルは既に存在します',
-      selectPlayerWarn: 'プレイヤーを選択してください',
-      selectTableWarn: 'テーブルを選択してください',
-      noActiveSession: '進行中のセッションがありません',
-      sessionPausedWarn: 'セッションは一時停止中です',
-      nothingToUndo: '取り消せるものがありません',
-      undoSuccess: '取り消しました',
-      sessionEnded: 'セッション終了',
-      sessionStarted: 'セッション開始',
-      importSuccess: 'インポート成功',
-      importInvalid: '無効なデータファイルです',
-      importFailed: 'インポート失敗',
-      resetDone: 'すべてのデータをリセットしました',
-      enterName: '名前を入力してください',
-      deleteSessionConfirm: 'このデータを削除しますか。',
-      deletePlayerConfirm: 'このプレイヤーを削除しますか。履歴は残ります。',
-      deleteTableConfirm: 'このテーブルを削除しますか',
-      resetConfirm: 'すべてのデータをリセットしますか。元に戻せません。',
-      importConfirm: 'インポートすると既存のデータがすべて置き換わります。続行しますか？',
-      undoConfirm: '最後の記録を取り消しますか。',
-      endSessionConfirm: 'このセッションを終了しますか。',
-      sessionSummary: 'セッション結果', current: '今回', lastCol: '前回', secondLast: '前々回',
-      threeTotal: '3回合計', averageCol: '平均',
-      highRun: 'ハイラン', playTime: '時間',
-      targetLine: '目標: {t} · 達成: {s} ({p}%)',
-      close: '閉じる', closeWithSeconds: '閉じる ({s}秒)',
-      breakLine: 'ブレイク', fouls: 'ファウル', mistakes: 'ミス',
-      addPlayerTitle: 'プレイヤー追加', editPlayerTitle: 'プレイヤー編集',
-      addTableTitle: 'テーブル追加', editTableTitle: 'テーブル編集',
-      liveFoundTitle: '未完了のセッションがあります',
-      liveFoundMsg: '進行中のセッションがあります：{mode} · {progress} · {time}',
-      liveResume: '続ける', liveEnd: '終了して保存', liveDiscard: '破棄',
-      liveResumed: 'セッションを再開しました',
-      liveExistsWarn: 'すでに進行中のセッションがあります。先に終了してください。',
-      focusOn: '集中', focusOff: '集中を終了', pts: '点',
-      sessionCompleteWarn: 'このセッションはすでに規定の回数を終えています。',
-      sessionProgress: '{done}/{total}',
-      tdfInvalid: '無効な値',
-      tdfImpossible: '不可能な TDF 値',
-      tdfAdjusted: '調整後', tdfRaw: '元の値', sessionEmpty: '空白のデータ'
-    }
-  };
+   Loaded after i18n.js as a classic script, because several rows are
+   generated as HTML with inline onclick handlers, which need these
+   functions to live on window.
+   ============================================================ */
 
 // ============================================================
 // TDF CONSTANTS
@@ -1826,6 +730,10 @@ let timerInterval = null, timerSeconds = 0;
 let hideScore = false, historyVisible = 5;
 let focusMode = false, focusPrevScroll = 0;
 let currentMode = 'standard';
+// RDS is a reference view, not a recording mode: currentMode stays on the
+// last real mode so every standard/bowlard code path keeps working.
+let rdsView = false, rdsLevel = 1, rdsPlayerId = '', rdsChanging = false;
+let rds100Timer = null;
 let bowlardInputMode = 'cumulative';
 
 // ============================================================
@@ -1957,6 +865,9 @@ function applyLanguage() {
   renderHistory();
   updateUI();
   setDeleteMenuChevron(document.getElementById('deleteMenuGroup').style.display !== 'none');
+  // The RDS panel builds its rules/meta text from t(), so it must be rebuilt
+  // whenever the language changes.
+  if (rdsView) renderRds();
 }
 
 // Chevron on the "Delete…" split button, mirroring the sibling controls.
@@ -2013,6 +924,10 @@ function normalizeData(obj) {
   // In-progress session is stored OUTSIDE of sessions, so every
   // sessions.filter(...) in this file keeps meaning "finished sessions".
   if (!('liveSession' in obj)) obj.liveSession = null;
+  if (!obj.rdsRecords || typeof obj.rdsRecords !== 'object') obj.rdsRecords = {};
+  // RDS 100 games in progress, one per player, plus the finished-game log.
+  if (!obj.rds100 || typeof obj.rds100 !== 'object') obj.rds100 = {};
+  if (!Array.isArray(obj.rds100History)) obj.rds100History = [];
   if (!obj.lastUsed) obj.lastUsed = { playerId:'', tableId:'' };
   if (obj.lastUsed.targetStandard === undefined) obj.lastUsed.targetStandard = 100;
   if (obj.lastUsed.targetBowlard  === undefined) obj.lastUsed.targetBowlard  = 100;
@@ -3356,6 +2271,846 @@ function updateSetupLock() {
   });
 }
 
+// ============================================================
+// RDS — Runout Drill System (interactive reference)
+// Source: Dr. Dave Alciatore, Billiards Digest, Oct 2020.
+// Rules for levels 1-13 are taken from the illustrated tables in the
+// article; levels 14-16 come from the same progression (9-ball rules,
+// 8-ball + remaining in order, full rotation).
+// ============================================================
+
+// Rack layouts, front row first. 'S'=solid, 'P'=stripe, '8'=the eight ball.
+// The trailing number is the ball number, so the diagram doubles as a
+// "which balls go where" reference.
+const RDS_RACKS = {
+  triangle6: [
+    ['S1'],
+    ['S2', 'S3'],
+    ['S4', 'S5', 'S6']
+  ],
+  // 7 balls: a 6-ball triangle with the 8 added, so the 8 sits in the middle.
+  // Ball 9 is kept out of the bottom slot (it would sit right under the 8).
+  rack7: [
+    ['S1'],
+    ['P9', 'P10'],
+    ['S2', '8', 'S3'],
+    ['P11']
+  ],
+  // 8-ball variant of the 9-ball diamond: the 8 ball in the centre.
+  diamond9: [
+    ['S1'],
+    ['S2', 'P11'],
+    ['S3', '8', 'S4'],
+    ['P10', 'P12'],
+    ['P9']
+  ],
+  // Standard 9-ball rack: only balls 1-9, with the 1 on top, the 9 in the
+  // centre and the 2 at the bottom.
+  diamond9n: [
+    ['S1'],
+    ['S3', 'S4'],
+    ['S5', 'P9', 'S6'],
+    ['S7', '8'],
+    ['S2']
+  ],
+  // 15-ball rack with the 8 in the middle of the third row.
+  triangle15: [
+    ['S1'],
+    ['P15', 'S5'],
+    ['S2', '8', 'P10'],
+    ['P11', 'S7', 'P14', 'S3'],
+    ['S4', 'P9', 'P13', 'S6', 'P12']
+  ]
+};
+
+// Level name → rank-plate tier, so the RDS badge uses the same palette as
+// the tracker's own rank plate.
+const RDS_PL_TIER = {
+  plNov: 'r-nov',
+  plLowerBeg: 'r-beg-l', plMidBeg: 'r-beg-m', plUpperBeg: 'r-beg-u',
+  plLowerInt: 'r-int-l', plMidInt: 'r-int-m', plUpperInt: 'r-int-u',
+  plLowerAdv: 'r-adv-l', plMidAdv: 'r-adv-m', plUpperAdv: 'r-adv-u',
+  plLowerShort: 'r-ama-l', plUpperShort: 'r-ama-u',
+  plSemiPro: 'r-pro', plWorldPro: 'r-wc'
+};
+
+// The 14-tier rating table, top to bottom. `levels` lists the RDS levels that
+// belong to the tier; `key` names the tier, `desc` carries its description.
+const RANK_TIERS = [
+  { key:'plWorldPro',   cls:'r-wc',    levels:[16],      bu:'185~200', abcd:'A++ / AAAA / SS', fargo:'> 750',     q:'—',      b:'—',      ars:'10-2',    cn:'11',      desc:'tdWc' },
+  { key:'plSemiPro',    cls:'r-pro',   levels:[15],      bu:'175~184', abcd:'A+ / AAA / S',    fargo:'720~749',   q:'18.1+',  b:'210+',   ars:'10-1',    cn:'10, 11',  desc:'tdPro' },
+  { key:'plUpperShort', cls:'r-ama-u', levels:[14],      bu:'165~174', abcd:'A / AA',          fargo:'680~719',   q:'16.1~18.0', b:'180~209', ars:'10, 10-1', cn:'9, 10', desc:'tdUAma' },
+  { key:'plLowerShort', cls:'r-ama-l', levels:[13],      bu:'155~164', abcd:'A- / A',          fargo:'640~679',   q:'12.1~16.0', b:'140~179', ars:'9, 10',   cn:'8, 9',   desc:'tdLAma' },
+  { key:'plUpperAdv',   cls:'r-adv-u', levels:[12],      bu:'140~154', abcd:'B+',              fargo:'600~639',   q:'11.1~12.0', b:'127~139', ars:'8, 9',   cn:'7, 8',   desc:'tdUAdv' },
+  { key:'plMidAdv',     cls:'r-adv-m', levels:[11],      bu:'125~139', abcd:'B',               fargo:'550~599',   q:'10.1~11.0', b:'114~126', ars:'7, 8',   cn:'6, 7',   desc:'tdMAdv' },
+  { key:'plLowerAdv',   cls:'r-adv-l', levels:[10],      bu:'110~124', abcd:'B-',              fargo:'500~549',   q:'9.1~10.0',  b:'100~113', ars:'7, 8',   cn:'5, 6',   desc:'tdLAdv' },
+  { key:'plUpperInt',   cls:'r-int-u', levels:[9],       bu:'95~109',  abcd:'C+',              fargo:'450~499',   q:'8.1~9.0',   b:'87~99',   ars:'6, 7',   cn:'4, 5',   desc:'tdUInt' },
+  { key:'plMidInt',     cls:'r-int-m', levels:[8],       bu:'70~94',   abcd:'C',               fargo:'400~449',   q:'7.1~8.0',   b:'74~86',   ars:'5, 6',   cn:'3, 4',   desc:'tdMInt' },
+  { key:'plLowerInt',   cls:'r-int-l', levels:[7],       bu:'55~69',   abcd:'C-',              fargo:'350~399',   q:'6.1~7.0',   b:'60~73',   ars:'5, 6',   cn:'2, 3',   desc:'tdLInt' },
+  { key:'plUpperBeg',   cls:'r-beg-u', levels:[6],       bu:'40~54',   abcd:'D+',              fargo:'325~349',   q:'5.1~6.0',   b:'50~59',   ars:'4, 5',   cn:'2',      desc:'tdUBeg' },
+  { key:'plMidBeg',     cls:'r-beg-m', levels:[5],       bu:'30~39',   abcd:'D',               fargo:'300~324',   q:'4.1~5.0',   b:'40~49',   ars:'3, 4',   cn:'1',      desc:'tdMBeg' },
+  { key:'plLowerBeg',   cls:'r-beg-l', levels:[4],       bu:'20~29',   abcd:'D-',              fargo:'200~299',   q:'3.1~4.0',   b:'29~39',   ars:'2, 3',   cn:'0',      desc:'tdLBeg' },
+  { key:'plNov',        cls:'r-nov',   levels:[1,2,3],   bu:'0~19',    abcd:'D--',             fargo:'0~200',     q:'~3.0',      b:'~29',     ars:'1, 2',   cn:'0',      desc:'tdNov' }
+];
+
+function rdsLevelRange(tier) {
+  const l = tier.levels;
+  return l.length > 1 ? `${l[0]}–${l[l.length - 1]}` : String(l[0]);
+}
+
+// Rows for the 14-tier comparison table. `curIdx` marks the row to highlight;
+// `activeCol` marks which Q Skill / Bowlard column belongs to the open mode.
+function rankTierRows(curIdx, activeCol) {
+  const qCls = activeCol === 'qskill'  ? ' class="col-active"' : '';
+  const bCls = activeCol === 'bowlard' ? ' class="col-active"' : '';
+  return RANK_TIERS.map((tier, i) => {
+    // The column shows only the primary ABCD grade; the full list (e.g.
+    // "A++ / AAAA / SS") stays in the expanded description.
+    const abcdShort = String(tier.abcd).split(' / ')[0];
+    const isCur = i === curIdx;
+    return `<tr class="rds-rank-row${isCur ? ' current' : ''}" data-idx="${i}">`
+      + `<td>${isCur ? '<span class="rds-cur-dot"></span>' : ''}<span class="rank-plate ${tier.cls}">${escapeHtml(t(tier.key))}</span></td>`
+      + `<td>${escapeHtml(rdsLevelRange(tier))}</td>`
+      + `<td>${escapeHtml(tier.bu)}</td>`
+      + `<td>${escapeHtml(abcdShort)}</td>`
+      + `<td>${escapeHtml(tier.fargo)}</td>`
+      + `<td${qCls}>${escapeHtml(tier.q)}</td>`
+      + `<td${bCls}>${escapeHtml(tier.b)}</td>`
+      + `</tr>`
+      + `<tr class="rds-rank-desc" data-idx="${i}" hidden><td colspan="7">`
+      + `<span class="rds-tag">ABCD ${escapeHtml(tier.abcd)}</span>`
+      + `<span class="rds-tag">ARS ${escapeHtml(tier.ars)}</span>`
+      + `<span class="rds-tag">CN ${escapeHtml(tier.cn)}</span>`
+      + `<p>${escapeHtml(t(tier.desc))}</p></td></tr>`;
+  }).join('');
+}
+
+// Renders the 14-tier comparison table inside the RDS card. Clicking a row
+// reveals that tier's description, ARS and CN rating.
+function renderRdsRankTable() {
+  const body = document.getElementById('rdsRankBody');
+  if (!body) return;
+  const curIdx = RANK_TIERS.findIndex(x => x.levels.indexOf(rdsLevel) !== -1);
+  body.innerHTML = rankTierRows(curIdx, 'qskill');
+}
+
+// bih: 'none' | 'every' | <number of extra ball-in-hands>
+// order: 'any' | 'rot'
+// rule: 'none' | '8' | '9'
+const RDS_LEVELS = [
+  { n:1,  rack:'triangle6',  balls:6,  bih:'none',  order:'any', rule:'none', pl:'plNov',        abcd:'D--',      fargo:'0-200',   bu:'0-19',
+    frags:['rfBreakN|6','rfRemoveCB','rfPocketDirect','rfWipe'] },
+  { n:2,  rack:'triangle6',  balls:6,  bih:'every', order:'any', rule:'none', pl:'plNov',        abcd:'D--',      fargo:'0-200',   bu:'0-19',
+    frags:['rfBreakN|6','rfBihEvery','rfPocketAny'] },
+  { n:3,  rack:'triangle6',  balls:6,  bih:3,       order:'any', rule:'none', pl:'plNov',        abcd:'D--',      fargo:'0-200',   bu:'0-19',
+    frags:['rfBreakN|6','rfBihPlus|3','rfPocketAny'] },
+  { n:4,  rack:'triangle6',  balls:6,  bih:2,       order:'any', rule:'none', pl:'plLowerBeg',   abcd:'D-',       fargo:'200-299', bu:'20-29',
+    frags:['rfBreakN|6','rfBihPlus|2','rfPocketAny'] },
+  { n:5,  rack:'triangle6',  balls:6,  bih:1,       order:'any', rule:'none', pl:'plMidBeg',     abcd:'D',        fargo:'300-324', bu:'30-39',
+    frags:['rfBreakN|6','rfBihPlus|1','rfPocketAny'] },
+  { n:6,  rack:'rack7',      balls:7,  bih:1,       order:'any', rule:'8',    pl:'plUpperBeg',   abcd:'D+',       fargo:'325-349', bu:'40-54',
+    frags:['rfBreak7','rf8ball','rfPocket8'] },
+  { n:7,  rack:'diamond9n',  balls:9,  bih:1,       order:'any', rule:'none', pl:'plLowerInt',   abcd:'C-',       fargo:'350-399', bu:'55-69',
+    frags:['rfBreakN|9','rfBihPlus|1','rfPocketAny'] },
+  { n:8,  rack:'diamond9',   balls:9,  bih:1,       order:'any', rule:'8',    pl:'plMidInt',     abcd:'C',        fargo:'400-449', bu:'70-94',
+    frags:['rfBreak9','rf8ball','rfPocket8'] },
+  { n:9,  rack:'triangle15', balls:15, bih:2,       order:'any', rule:'none', pl:'plUpperInt',   abcd:'C+',       fargo:'450-499', bu:'95-109',
+    frags:['rfBreakN|15','rfBihPlus|2','rfPocketAny'] },
+  { n:10, rack:'triangle6',  balls:6,  bih:'after', order:'rot', rule:'none', pl:'plLowerAdv',   abcd:'B-',       fargo:'500-549', bu:'110-124',
+    frags:['rfBreakN|6','rfBihAfter','rfRotation'] },
+  { n:11, rack:'triangle15', balls:15, bih:'after', order:'any', rule:'none', pl:'plMidAdv',     abcd:'B',        fargo:'550-599', bu:'125-139',
+    frags:['rfBreakN|15','rfBihAfter','rfPocketAny'] },
+  { n:12, rack:'triangle15', balls:15, bih:'after', order:'any', rule:'8',    pl:'plUpperAdv',   abcd:'B+',       fargo:'600-639', bu:'140-154',
+    frags:['rfBreakN|15','rf8ball','rfPocket8'] },
+  { n:13, rack:'diamond9',   balls:9,  bih:'after', order:'rot', rule:'8',    pl:'plLowerShort', abcd:'A- / A',   fargo:'640-679', bu:'155-164',
+    frags:['rfBreak9','rf8ball','rfPocket8','rfRemainingRotation'] },
+  { n:14, rack:'diamond9n',  balls:9,  bih:'after', order:'rot', rule:'9',    pl:'plUpperShort', abcd:'A / AA',   fargo:'680-719', bu:'165-174',
+    frags:['rfBreakN|9','rf9ball'] },
+  { n:15, rack:'triangle15', balls:15, bih:'after', order:'rot', rule:'8',    pl:'plSemiPro',    abcd:'A+ / AAA', fargo:'720-749', bu:'175-184',
+    frags:['rfBreakN|15','rf8ball','rfPocket8','rfRemainingRotation'] },
+  { n:16, rack:'triangle15', balls:15, bih:'after', order:'rot', rule:'none', pl:'plWorldPro',   abcd:'A++ / AAAA', fargo:'750+',  bu:'185-200',
+    frags:['rfBreakN|15','rfBihAfter','rfRotation'] }
+];
+
+// Ball colours: 1-8 are the solids; 9-15 repeat them as stripes.
+const RDS_BALL_COLOR = {
+  1:'#e6b800', 2:'#1c4fa1', 3:'#cf3030', 4:'#6b3fa0',
+  5:'#e2761b', 6:'#1e7a3c', 7:'#8b1a1a'
+};
+
+function rdsBallSvg(x, y, r, spec, uid) {
+  const num = spec === '8' ? 8 : parseInt(spec.slice(1), 10);
+  const isStripe = spec !== '8' && spec[0] === 'P';
+  const color = spec === '8' ? '#161616' : (RDS_BALL_COLOR[num >= 9 ? num - 8 : num] || '#777');
+  const body = isStripe ? '#fbfbfb' : color;
+  const numR = r * 0.46;
+  const fontSize = (r * 0.62).toFixed(2);
+  let out = `<g class="rds-ball">`;
+  out += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r}" fill="${body}" stroke="rgba(0,0,0,.55)" stroke-width=".9"/>`;
+  if (isStripe) {
+    const bh = r * 1.02;
+    out += `<clipPath id="rdsclip${uid}"><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r}"/></clipPath>`;
+    out += `<rect x="${(x - r).toFixed(2)}" y="${(y - bh / 2).toFixed(2)}" width="${(r * 2).toFixed(2)}" height="${bh.toFixed(2)}" fill="${color}" clip-path="url(#rdsclip${uid})"/>`;
+  }
+  out += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${numR.toFixed(2)}" fill="#fbfbfb" stroke="rgba(0,0,0,.25)" stroke-width=".6"/>`;
+  out += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" font-weight="700" fill="${spec === '8' ? '#111' : '#222'}">${num}</text>`;
+  out += `</g>`;
+  return out;
+}
+
+function rdsRackSvg(layout) {
+  const r = 12, dx = r * 2 + 1.6, dy = r * 1.86;
+  const rows = layout.length;
+  const maxCols = Math.max(...layout.map(row => row.length));
+  const w = maxCols * dx + r;
+  // Place rows first: a lone ball below a wide row has nothing to nest into,
+  // so it would sit flush against the ball above it. Push it down a little.
+  const ys = layout.map((row, i) => {
+    let y = r + 2 + i * dy;
+    if (row.length === 1 && i > 0 && layout[i - 1].length >= 3) y += r * 0.3;
+    return y;
+  });
+  const h = ys[ys.length - 1] + r + 2;
+  const parts = [];
+  layout.forEach((row, i) => {
+    const y = ys[i];
+    row.forEach((spec, j) => {
+      const x = w / 2 + (j - (row.length - 1) / 2) * dx;
+      parts.push(rdsBallSvg(x, y, r, spec, `${i}_${j}`));
+    });
+  });
+  return `<svg class="rds-rack-svg" viewBox="0 0 ${w.toFixed(0)} ${h.toFixed(0)}" role="img">${parts.join('')}</svg>`;
+}
+
+// Builds the level chips. The blue chip is the level being VIEWED; the
+// dotted one is the player's recorded level, so browsing never looks
+// like it changed the record.
+function rdsBuildChips() {
+  const box = document.getElementById('rdsChips');
+  if (!box) return;
+  const rec = rdsRecordFor(rdsPlayerId);
+  const cur = rec ? rec.level : -1;
+  box.innerHTML = RDS_LEVELS.map(l =>
+    `<button type="button" class="rds-chip${l.n === rdsLevel ? ' active' : ''}${l.n === cur ? ' is-current' : ''}" data-rds="${l.n}" title="${t('rdsLevelShort')} ${l.n}">${l.n}</button>`
+  ).join('');
+}
+
+function rdsSetLevel(n) {
+  rdsLevel = n;
+  renderRds();
+}
+
+function rdsMetaCell(labelKey, value) {
+  return `<div class="rds-cell"><span class="rds-celllabel" data-i18n="${labelKey}">${t(labelKey)}</span>` +
+         `<span class="rds-cellvalue">${value}</span></div>`;
+}
+
+function renderRds() {
+  const cfg = RDS_LEVELS.find(l => l.n === rdsLevel) || RDS_LEVELS[0];
+
+  rdsBuildChips();
+
+  const rackEl = document.getElementById('rdsRack');
+  if (rackEl) rackEl.innerHTML = rdsRackSvg(RDS_RACKS[cfg.rack]);
+
+  const titleEl = document.getElementById('rdsLevelTitle');
+  if (titleEl) titleEl.innerHTML =
+    `<span class="rds-lvlnum">${t('rdsLevel')} ${cfg.n}</span>` +
+    `<span class="rank-plate ${RDS_PL_TIER[cfg.pl] || 'r-nov'}">${t(cfg.pl)}</span>`;
+
+  // Rule bullets: each fragment is "key" or "key|param".
+  const rulesEl = document.getElementById('rdsRules');
+  if (rulesEl) {
+    rulesEl.innerHTML = cfg.frags.map(f => {
+      const [key, param] = f.split('|');
+      const text = t(key).replace('{n}', param !== undefined ? param : '');
+      return `<li>${text}</li>`;
+    }).join('');
+  }
+
+  const bihText = cfg.bih === 'none' ? t('bihNone')
+                : cfg.bih === 'every' ? t('bihEvery')
+                : cfg.bih === 'after' ? t('bihAfter')
+                : t('bihPlus').replace('{n}', cfg.bih);
+  const orderText = cfg.order === 'rot' ? t('ordRotation') : t('ordAny');
+  const ruleText = cfg.rule === '8' ? t('rule8') : cfg.rule === '9' ? t('rule9') : t('ruleNone');
+
+  const metaEl = document.getElementById('rdsMeta');
+  if (metaEl) metaEl.innerHTML =
+      rdsMetaCell('rdsBalls', cfg.balls)
+    + rdsMetaCell('rdsBih', bihText)
+    + rdsMetaCell('rdsOrder', orderText)
+    + rdsMetaCell('rdsRules', ruleText)
+    + rdsMetaCell('rdsAbcd', cfg.abcd)
+    + rdsMetaCell('rdsFargo', cfg.fargo)
+    + rdsMetaCell('rdsBu', cfg.bu);
+
+  rdsRenderRecord();
+  rdsRender100();
+  renderRdsRankTable();
+}
+
+// ============================================================
+// RDS records — one entry per player: current level + round log.
+// Progression comes from the article: run 2+ of 3 racks to move up
+// one level, run none of 3 to move down one, run 1 of 3 to stay.
+// ============================================================
+const RDS_MIN_LEVEL = 1;
+const RDS_MAX_LEVEL = RDS_LEVELS.length;
+// Only the newest rounds are kept (and shown) — the log stays short.
+const RDS_HIST_MAX = 10;
+
+// One row per recorded round; shared by the "history" dialog.
+function rdsRoundRowHtml(a) {
+  const cls = { up: 'rds-badge-up', stay: 'rds-badge-stay', down: 'rds-badge-down' };
+  const lbl = { up: 'rdsUp', stay: 'rdsStay', down: 'rdsDown' };
+  const d = new Date(a.at);
+  const pad = n => String(n).padStart(2, '0');
+  const ds = `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const res = cls[a.result] ? a.result : rdsOutcome(a.racks);
+  return `<div class="rds-hrow">`
+    + `<span class="rds-hdate">${ds}</span>`
+    + `<span class="rds-hlvl">${t('rdsLevelShort')} ${a.level}</span>`
+    + `<span class="rds-hracks">${a.racks}/3 ${t('rdsRackUnit')}</span>`
+    + `<span class="rds-badge ${cls[res]}">${t(lbl[res])}</span>`
+    + `</div>`;
+}
+
+// One row per finished RDS 100 game.
+function rds100RowHtml(h) {
+  const d = new Date(h.at);
+  const pad = n => String(n).padStart(2, '0');
+  const ds = `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const lv = h.fromLevel === h.toLevel
+    ? `${t('rdsLevelShort')} ${h.fromLevel}`
+    : `${t('rdsLevelShort')} ${h.fromLevel}→${h.toLevel}`;
+  // Show the table when the game was played on something other than the
+  // default one, so a score can be traced back to its difficulty.
+  const tbl = (h.tableName && h.tableTdf && h.tableTdf !== 1)
+    ? `${h.tableName} · ${h.tableTdf.toFixed(2)}`
+    : (h.tableName || '');
+  // Keep the adjusted score too: a row can't be read back later without
+  // knowing whether the number was before or after the difficulty factor.
+  const adj = (typeof h.adjScore === 'number')
+    ? h.adjScore
+    : rds100EffScore(h.score, h.tableTdf);
+  // Spell the second number out: "88 (75)" alone leaves the reader guessing
+  // which of the two is the adjusted score.
+  const scoreTxt = `${t('rds100Score')} ${h.score}` +
+    (adj !== h.score ? ` (${adj})` : '');
+  return `<div class="rds-hrow">`
+    + `<span class="rds-hdate">${ds}</span>`
+    + `<span class="rds-hlvl">${lv}</span>`
+    + `<span class="rds-hracks">${formatTime(h.playTime)}</span>`
+    + `<span class="rds-hracks" title="raw ${h.score}${adj !== h.score ? ' → adjusted ' + adj : ''}">${scoreTxt}</span>`
+    + (tbl ? `<span class="rds-hracks rds-hmuted">${escapeHtml(tbl)}</span>` : '')
+    + `<span class="rds-badge rds-badge-stay">${t('rdsLevelShort')} ${h.refLevel}</span>`
+    + `</div>`;
+}
+
+// Rows live in a dialog rather than under the card, so the reference stays
+// compact on a phone.
+function rdsShowHistory(title, rowsHtml, emptyText) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box modal-rds-hist" role="dialog" aria-modal="true">
+      <h3></h3>
+      <div class="rds-history"></div>
+      <div class="modal-actions"><button class="ok"></button></div>
+    </div>`;
+  overlay.querySelector('h3').textContent = title;
+  const list = overlay.querySelector('.rds-history');
+  if (rowsHtml.length) {
+    list.innerHTML = rowsHtml.join('');
+  } else {
+    const empty = document.createElement('div');
+    empty.className = 'rds-empty';
+    empty.textContent = emptyText;
+    list.appendChild(empty);
+  }
+  const ok = overlay.querySelector('.ok');
+  ok.textContent = t('close');
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  const close = () => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 200);
+    document.removeEventListener('keydown', onKey);
+  };
+  ok.onclick = close;
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+  setTimeout(() => ok.focus(), 60);
+}
+
+function rdsRecordFor(playerId) {
+  if (!playerId) return null;
+  if (!appData.rdsRecords) appData.rdsRecords = {};
+  const rec = appData.rdsRecords[playerId];
+  // No record yet: the player has not chosen a starting level, so callers must
+  // treat this as "first run" rather than inventing level 1 for them.
+  if (!rec || typeof rec !== 'object') return null;
+  if (typeof rec.level !== 'number' || !isFinite(rec.level)) rec.level = RDS_MIN_LEVEL;
+  rec.level = Math.min(RDS_MAX_LEVEL, Math.max(RDS_MIN_LEVEL, rec.level));
+  if (!Array.isArray(rec.attempts)) rec.attempts = [];
+  return rec;
+}
+
+// Creates the record on first run, or moves the level of an existing one
+// (history is kept so a correction never wipes past rounds).
+function rdsSetLevelForPlayer(playerId, level) {
+  if (!playerId) return;
+  if (!appData.rdsRecords) appData.rdsRecords = {};
+  const n = Math.min(RDS_MAX_LEVEL, Math.max(RDS_MIN_LEVEL, level | 0 || RDS_MIN_LEVEL));
+  const existing = appData.rdsRecords[playerId];
+  if (existing && Array.isArray(existing.attempts) && existing.attempts.length) {
+    existing.level = n;
+  } else {
+    appData.rdsRecords[playerId] = { level: n, attempts: [] };
+  }
+  rdsChanging = false;
+  persistData();
+  rdsLevel = n;
+  renderRds();
+}
+
+function rdsOutcome(racks) {
+  if (racks >= 2) return 'up';
+  if (racks === 0) return 'down';
+  return 'stay';
+}
+
+function rdsNextLevel(level, result) {
+  if (result === 'up')   return Math.min(RDS_MAX_LEVEL, level + 1);
+  if (result === 'down') return Math.max(RDS_MIN_LEVEL, level - 1);
+  return level;
+}
+
+// Records a round at the player's CURRENT level (browsing with the chips
+// never changes what gets logged), then moves the view to the new level.
+function rdsLogRound(racks) {
+  const rec = rdsRecordFor(rdsPlayerId);
+  if (!rec) return;
+  const level = rec.level;
+  const result = rdsOutcome(racks);
+  const next = rdsNextLevel(level, result);
+  rec.attempts.unshift({ at: Date.now(), level, racks, result, next });
+  // Keep the log short: only the newest RDS_HIST_MAX rounds are stored.
+  rec.attempts = rec.attempts.slice(0, RDS_HIST_MAX);
+  rec.level = next;
+  persistData();
+  rdsLevel = next;
+  renderRds();
+}
+
+// The RDS view uses the shared Player selector, like every other mode — it
+// has no selector of its own.
+function rdsSyncPlayerSelect() {
+  const sel = document.getElementById('playerSelect');
+  const chosen = sel ? sel.value : '';
+  if (chosen && appData.players.some(p => p.id === chosen)) {
+    rdsPlayerId = chosen;
+    return;
+  }
+  if (!rdsPlayerId || !appData.players.some(p => p.id === rdsPlayerId)) {
+    const fallback = appData.lastUsed.playerId || (appData.players[0] && appData.players[0].id) || '';
+    rdsPlayerId = appData.players.some(p => p.id === fallback) ? fallback
+                : (appData.players[0] && appData.players[0].id) || '';
+  }
+}
+
+function rdsBuildStartOptions() {
+  const sel = document.getElementById('rdsStartLevel');
+  if (!sel) return;
+  // Rebuild when the language changes too, not just once.
+  const version = `${currentLang}:${RDS_MAX_LEVEL}`;
+  if (sel.dataset.built !== version) {
+    const prev = sel.value;
+    sel.innerHTML = RDS_LEVELS.map(l =>
+      `<option value="${l.n}">${l.n} — ${t(l.pl)}</option>`).join('');
+    sel.dataset.built = version;
+    sel.value = prev || '5';
+  }
+}
+
+function rdsRenderRecord() {
+  rdsSyncPlayerSelect();
+  const rec = rdsRecordFor(rdsPlayerId);
+  const showSetup = !rec || rdsChanging;
+
+  rdsBuildStartOptions();
+  const setupEl  = document.getElementById('rdsSetup');
+  const topEl    = document.getElementById('rdsRecordTop');
+  const changeEl = document.getElementById('rdsChangeLevel');
+  if (setupEl)  setupEl.style.display  = showSetup ? '' : 'none';
+  if (topEl)    topEl.style.display    = showSetup ? 'none' : '';
+  if (changeEl) changeEl.style.display = (rec && !rdsChanging) ? '' : 'none';
+
+  const curEl = document.getElementById('rdsCurrentLevel');
+  if (curEl) curEl.textContent = rec ? rec.level : '—';
+
+  const btns = document.getElementById('rdsLogBtns');
+  if (btns) {
+    // "n/3" keeps the buttons compact and sidesteps plural forms.
+    btns.innerHTML = [0, 1, 2, 3].map(n =>
+      `<button type="button" class="rds-logbtn" data-racks="${n}" title="${n}/3 ${t('rdsRackUnit')}">${n}<span>/3</span></button>`
+    ).join('');
+  }
+
+  const histBtn = document.getElementById('rdsHistBtn');
+  if (histBtn) {
+    const n = rec ? rec.attempts.length : 0;
+    histBtn.textContent = `${t('rdsHistory')} (${n})`;
+    histBtn.disabled = n === 0;
+  }
+}
+
+// ============================================================
+// RDS 100 — the scored variant. Start at 100 and play one rack per
+// level; every miss or foul costs as many points as balls left on the
+// table. Clearing a rack costs nothing and moves you up a level.
+// Score x 2 is the BU score, so the score also has a level it maps to;
+// the player only ever sees that mapped level, never the formula.
+// ============================================================
+const RDS100_START = 100;
+
+function rds100For(playerId) {
+  if (!playerId) return null;
+  if (!appData.rds100 || typeof appData.rds100 !== 'object') appData.rds100 = {};
+  const g = appData.rds100[playerId];
+  if (!g || typeof g !== 'object') return null;
+  if (typeof g.score !== 'number' || !isFinite(g.score)) g.score = RDS100_START;
+  if (typeof g.elapsed !== 'number' || !isFinite(g.elapsed)) g.elapsed = 0;
+  if (typeof g.level !== 'number' || !isFinite(g.level)) g.level = RDS_MIN_LEVEL;
+  g.level = Math.min(RDS_MAX_LEVEL, Math.max(RDS_MIN_LEVEL, g.level));
+  if (!Array.isArray(g.runs)) g.runs = [];
+  if (typeof g.running !== 'boolean') g.running = false;
+  if (typeof g.lastTick !== 'number') g.lastTick = null;
+  return g;
+}
+
+// Score x 2 -> BU score -> the level whose BU band contains it.
+// On a table with a difficulty factor the score is normalised first, the same
+// way Q Skill adjusts a session score, so an easy table can't inflate a level.
+function rds100EffScore(score, tdf) {
+  const raw = Math.max(0, score);
+  if (!isTdfAdjustedMode()) return raw;
+  const f = (typeof tdf === 'number' && isFinite(tdf) && tdf > 0) ? tdf : TDF_DEFAULT;
+  return adjustedScore(raw, f);
+}
+
+function rds100RefLevel(score, tdf) {
+  const bu = rds100EffScore(score, tdf) * 2;
+  let best = RDS_MIN_LEVEL;
+  RDS_LEVELS.forEach(l => {
+    const m = /^(\d+)-(\d+)$/.exec(l.bu);
+    if (!m) return;
+    if (bu >= parseInt(m[1], 10) && bu <= parseInt(m[2], 10)) best = l.n;
+  });
+  return best;
+}
+
+function rds100Balls(level) {
+  const cfg = RDS_LEVELS[(level | 0) - 1] || RDS_LEVELS[0];
+  return cfg.balls;
+}
+
+// Adds the seconds since the last tick to the game clock.
+function rds100Tick() {
+  const g = rds100For(rdsPlayerId);
+  if (!g || !g.running || !g.lastTick) return g;
+  const now = Date.now();
+  g.elapsed += Math.max(0, Math.round((now - g.lastTick) / 1000));
+  g.lastTick = now;
+  return g;
+}
+
+function rds100Arm() {
+  if (rds100Timer) { clearInterval(rds100Timer); rds100Timer = null; }
+  const g = rds100For(rdsPlayerId);
+  if (!g || !g.running || !rdsView) return;
+  rds100Timer = setInterval(() => {
+    const gg = rds100Tick();
+    if (!gg || !gg.running) { clearInterval(rds100Timer); rds100Timer = null; return; }
+    const el = document.getElementById('rds100Time');
+    if (el) el.textContent = formatTime(gg.elapsed);
+  }, 1000);
+}
+
+// The pre-game level picker mirrors the player's recorded level whenever no
+// game is running, so it always starts from where they actually are.
+function rds100SyncLevelSelect(active) {
+  const sel = document.getElementById('rds100Level');
+  if (!sel) return;
+  // currentLang, not documentElement.lang: the page keeps the old lang
+  // attribute, so keying on it never rebuilt the options.
+  const version = `${currentLang}:${RDS_MAX_LEVEL}`;
+  if (sel.dataset.built !== version) {
+    const prev = sel.value;
+    sel.innerHTML = RDS_LEVELS.map(l =>
+      `<option value="${l.n}">${l.n} — ${t(l.pl)}</option>`).join('');
+    sel.dataset.built = version;
+    if (prev) sel.value = prev;
+  }
+  if (active) {
+    if (sel.dataset.player !== rdsPlayerId) sel.dataset.player = rdsPlayerId;
+    return;
+  }
+  const rec = rdsRecordFor(rdsPlayerId);
+  sel.value = String(rec ? rec.level : RDS_MIN_LEVEL);
+  sel.dataset.player = rdsPlayerId;
+}
+
+function rds100PickedLevel() {
+  const sel = document.getElementById('rds100Level');
+  const v = sel ? parseInt(sel.value, 10) : NaN;
+  if (isFinite(v) && v >= RDS_MIN_LEVEL && v <= RDS_MAX_LEVEL) return v;
+  const rec = rdsRecordFor(rdsPlayerId);
+  return rec ? rec.level : RDS_MIN_LEVEL;
+}
+
+function rds100NewGame(startLevel) {
+  if (!rdsPlayerId) return;
+  if (!appData.rds100 || typeof appData.rds100 !== 'object') appData.rds100 = {};
+  const now = Date.now();
+  const level = Math.min(RDS_MAX_LEVEL,
+    Math.max(RDS_MIN_LEVEL, startLevel || rds100PickedLevel()));
+  const tbl = getSelectedTable();
+  appData.rds100[rdsPlayerId] = {
+    score: RDS100_START,
+    level,
+    elapsed: 0,
+    running: true,
+    lastTick: now,
+    startedAt: now,
+    // Locked in at start so the reference level stays meaningful if the
+    // table selector changes mid-game.
+    tableTdf: (tbl && typeof tbl.tdf === 'number' && isFinite(tbl.tdf) && tbl.tdf > 0) ? tbl.tdf : TDF_DEFAULT,
+    tableName: tbl ? tbl.name : '',
+    runs: []
+  };
+  // The reference card above follows the game.
+  rdsLevel = level;
+  persistData();
+  renderRds();
+  rds100Arm();
+}
+
+function rds100PauseToggle() {
+  const g = rds100For(rdsPlayerId);
+  if (!g) return;
+  if (g.running) {
+    rds100Tick();
+    g.running = false;
+    g.lastTick = null;
+  } else {
+    g.running = true;
+    g.lastTick = Date.now();
+  }
+  persistData();
+  rdsRender100();
+  rds100Arm();
+}
+
+// n = balls still on the table. 0 means the rack was cleared.
+// RDS 100 always climbs: every completed rack moves to the next level,
+// cleared or not — the score is what records how well it went.
+function rds100Choose(n) {
+  const g = rds100For(rdsPlayerId);
+  // Pausing only stops the clock, so a paused game still accepts the count.
+  if (!g) return;
+  const max = rds100Balls(g.level);
+  const left = Math.max(0, Math.min(max, n | 0));
+  rds100Tick();
+  const level = g.level;
+  const before = g.score;
+  g.score = Math.max(0, before - left);
+  g.runs.unshift({
+    at: Date.now(), level, remaining: left,
+    before, after: g.score, cleared: left === 0
+  });
+  const atTop = level >= RDS_MAX_LEVEL;
+  if (!atTop) g.level = level + 1;
+  // Keep the reference card on the level being played.
+  rdsLevel = g.level;
+  if (left === 0) showToast(t('rds100Cleared'), 'success');
+  if (g.score <= 0 || atTop) {
+    rds100Finish(true);
+    showToast(t(g.score <= 0 ? 'rds100GameOver' : 'rds100Complete'), 'info');
+    return;
+  }
+  persistData();
+  renderRds();
+  rds100Arm();
+}
+
+async function rds100EndGame() {
+  const g = rds100For(rdsPlayerId);
+  if (!g) return;
+  const ok = await modalConfirm({
+    title: t('rds100End'),
+    message: t('rds100EndMsg'),
+    okText: t('rds100End'),
+    cancelText: t('cancel'),
+    danger: true
+  });
+  if (!ok) return;
+  rds100Finish(false);
+}
+
+function rds100Finish(silent) {
+  const g = rds100For(rdsPlayerId);
+  if (!g) return;
+  rds100Tick();
+  if (!Array.isArray(appData.rds100History)) appData.rds100History = [];
+  const first = g.runs.length ? g.runs[g.runs.length - 1].level : g.level;
+  appData.rds100History.unshift({
+    at: Date.now(),
+    playerId: rdsPlayerId,
+    playTime: g.elapsed,
+    score: g.score,
+    refLevel: rds100RefLevel(g.score, g.tableTdf),
+    adjScore: rds100EffScore(g.score, g.tableTdf),
+    tableName: g.tableName || '',
+    tableTdf: g.tableTdf || 1,
+    fromLevel: first,
+    toLevel: g.level,
+    racks: g.runs.length
+  });
+  // Store at most RDS_HIST_MAX games per player.
+  const mine = appData.rds100History.filter(h => h.playerId === rdsPlayerId);
+  if (mine.length > RDS_HIST_MAX) {
+    const keep = new Set(mine.slice(0, RDS_HIST_MAX));
+    appData.rds100History = appData.rds100History.filter(
+      h => h.playerId !== rdsPlayerId || keep.has(h));
+  }
+  delete appData.rds100[rdsPlayerId];
+  persistData();
+  rdsRender100();
+  rds100Arm();
+  if (!silent) showToast(t('rds100GameOver'), 'info');
+}
+
+function rdsRender100() {
+  const g = rds100For(rdsPlayerId);
+  rds100SyncLevelSelect(!!g);
+  const live = document.getElementById('rds100Live');
+  const idle = document.getElementById('rds100Idle');
+  const play = document.getElementById('rds100Play');
+  const startEl = document.getElementById('rds100Start');
+  const pauseEl = document.getElementById('rds100Pause');
+  const promptEl = document.getElementById('rds100Prompt');
+  const scoreEl = document.getElementById('rds100Score');
+  const refEl = document.getElementById('rds100Ref');
+  const timeEl = document.getElementById('rds100Time');
+
+  if (live)   live.style.display   = g ? '' : 'none';
+  if (idle)   idle.style.display   = g ? 'none' : '';
+  if (play)   play.style.display   = g ? '' : 'none';
+  if (startEl) {
+    const has = Array.isArray(appData.rds100History) &&
+      appData.rds100History.some(h => h.playerId === rdsPlayerId);
+    setLabelText(startEl, t(has ? 'rds100Restart' : 'rds100Start'));
+  }
+  if (pauseEl) {
+    pauseEl.classList.toggle('is-on', !!(g && !g.running));
+    setLabelText(pauseEl, t(g && !g.running ? 'rds100Resume' : 'rds100Pause'));
+  }
+  if (g) {
+    if (scoreEl) scoreEl.textContent = String(g.score);
+    const adjEl = document.getElementById('rds100Adj');
+    if (adjEl) {
+      const eff = rds100EffScore(g.score, g.tableTdf);
+      adjEl.textContent = (eff !== g.score) ? ` (${eff})` : '';
+    }
+    const tblEl = document.getElementById('rds100Table');
+    if (tblEl) {
+      const tdf = (typeof g.tableTdf === 'number') ? g.tableTdf : 1;
+      tblEl.textContent = (g.tableName || '—') + (tdf !== 1 ? ` · ${tdf.toFixed(2)}` : '');
+    }
+    if (refEl)   refEl.textContent   = String(rds100RefLevel(g.score, g.tableTdf));
+    if (timeEl)  timeEl.textContent  = formatTime(g.elapsed);
+    if (promptEl) {
+      const lvl = RDS_LEVELS[g.level - 1] || RDS_LEVELS[0];
+      promptEl.textContent = t('rds100Pick')
+        .replace('{n}', lvl.balls)
+        .replace('{l}', g.level);
+    }
+  }
+
+  const balls = document.getElementById('rds100Balls');
+  if (balls) {
+    if (!g) {
+      balls.innerHTML = '';
+    } else {
+      const max = rds100Balls(g.level);
+      const opts = [];
+      for (let i = 0; i <= max; i++) opts.push(i);
+      balls.innerHTML = opts.map(i =>
+        `<button type="button" class="rds100-ball" data-left="${i}">${i}</button>`
+      ).join('');
+    }
+  }
+
+  const hist = document.getElementById('rds100History');
+  if (!hist) return;
+  const list = (appData.rds100History || [])
+    .filter(h => h.playerId === rdsPlayerId)
+    .slice(0, RDS_HIST_MAX);
+  // The clear button only makes sense when this player has something to clear.
+  const clearEl = document.getElementById('rds100Clear');
+  if (clearEl) clearEl.style.display = list.length ? '' : 'none';
+  if (!list.length) {
+    hist.innerHTML = `<div class="rds-empty">${t('rds100NoHist')}</div>`;
+    return;
+  }
+  hist.innerHTML = list.map(rds100RowHtml).join('');
+}
+
+// Wipes the current player's RDS 100 history. The level record is untouched.
+function rds100ClearHistory() {
+  const mine = (appData.rds100History || []).filter(h => h.playerId === rdsPlayerId);
+  if (!mine.length) return;
+  modalConfirm({
+    title: t('rds100Clear'),
+    message: t('rds100ClearAsk'),
+    okText: t('delete'),
+    danger: true
+  }).then(ok => {
+    if (!ok) return;
+    appData.rds100History = (appData.rds100History || [])
+      .filter(h => h.playerId !== rdsPlayerId);
+    persistData();
+    rdsRender100();
+    showToast(t('rds100HistCleared'), 'info');
+  });
+}
+
+// Swaps the whole page between the tracker and the RDS reference.
+function applyViewMode() {
+  document.body.classList.toggle('rds-view', rdsView);
+  const rdsRadio = document.querySelector('input[name="gameMode"][value="rds"]');
+  if (rdsView) {
+    if (rdsRadio) rdsRadio.checked = true;
+    // Resume on the player's recorded level, not on whatever was browsed last.
+    rdsSyncPlayerSelect();
+    const rec = rdsRecordFor(rdsPlayerId);
+    if (rec) rdsLevel = rec.level;
+    renderRds();
+    rds100Arm();
+  } else {
+    // Leaving the reference view stops the RDS 100 clock so it does not
+    // keep running while the player is scoring another mode.
+    const g = rds100For(rdsPlayerId);
+    if (g && g.running) { rds100Tick(); g.running = false; g.lastTick = null; persistData(); }
+    if (rds100Timer) { clearInterval(rds100Timer); rds100Timer = null; }
+    const r = document.querySelector(`input[name="gameMode"][value="${currentMode}"]`);
+    if (r) r.checked = true;
+  }
+}
+
 function updateUI() {
   const has = sessionActive && !!session;
   updateSetupLock();
@@ -3642,25 +3397,23 @@ function updateCompactStats() {
 // RANKS TABLE
 // ============================================================
 function renderRanksTable() {
-  const tbody = document.getElementById('ranksTableBody');
+  const tbody = document.getElementById('rankTiersBody');
   if (!tbody) return;
-  const ranks = RANKS.qskill.keys.map((key, i) => ({
-    key,
-    cls: RANKS.qskill.classes[i],
-    desc: ['rankDescBeg','rankDescNov','rankDescInt','rankDescAdv','rankDescLAma','rankDescUAma','rankDescPro'][i],
-  }));
 
+  // Highlight the tier implied by the CURRENT MODE's average, so the row
+  // always matches the badge shown in the stats card. (The RDS record level
+  // is a separate thing and is highlighted in the RDS card's own table.)
   const player = getSelectedPlayer();
-  let currentIdx = -1;
+  let curIdx = -1;
   if (player) {
     const ps = appData.sessions.filter(s => s.playerId === player.id && s.completed);
-    if (currentMode === 'bowlard') {
+    let avg, kind = currentMode === 'bowlard' ? 'bowlard' : 'qskill';
+    if (kind === 'bowlard') {
       const bs = ps.filter(s => s.mode === 'bowlard');
-      let avg = bs.length ? bs.reduce((a, x) => a + (x.totalScore || 0), 0) / bs.length : 0;
+      avg = bs.length ? bs.reduce((a, x) => a + (x.totalScore || 0), 0) / bs.length : 0;
       if (isTdfAdjustedMode() && bs.length) {
         avg = bs.reduce((a, x) => a + adjustedScore(x.totalScore || 0, x.tableTdf), 0) / bs.length;
       }
-      currentIdx = bowlardRankIndex(avg);
     } else {
       let total = 0, n = 0;
       ps.filter(s => s.mode !== 'bowlard').forEach(s => {
@@ -3670,24 +3423,14 @@ function renderRanksTable() {
           total += v; n++;
         });
       });
-      const avg = n ? total / n : 0;
-      currentIdx = qskillRankIndex(avg);
+      avg = n ? total / n : 0;
     }
+    const cls = rankFor(kind, avg).className;
+    curIdx = RANK_TIERS.findIndex(x => x.cls === cls);
   }
 
   const activeCol = (currentMode === 'bowlard') ? 'bowlard' : 'qskill';
-
-  tbody.innerHTML = ranks.map((r, i) => {
-    const isCur = i === currentIdx;
-    const qCls = (activeCol === 'qskill')  ? ' class="col-active"' : '';
-    const bCls = (activeCol === 'bowlard') ? ' class="col-active"' : '';
-    return `<tr${isCur ? ' class="current"' : ''}>
-      <td><span class="rank-plate ${r.cls}">${escapeHtml(t(r.key))}</span></td>
-      <td${qCls}>${escapeHtml(rankRangeFor('qskill', i))}</td>
-      <td${bCls}>${escapeHtml(rankRangeFor('bowlard', i))}</td>
-      <td>${escapeHtml(t(r.desc))}</td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML = rankTierRows(curIdx, activeCol);
 
   const thQ = document.getElementById('ranksColQSkill');
   const thB = document.getElementById('ranksColBowlard');
@@ -3722,17 +3465,19 @@ function translateDetailItem(item) {
   return map[item] || item;
 }
 
+// One ladder everywhere: the badge uses the same tiers as the rating table.
+// World Class has no Q Skill / Bowlard band, so the badge ladder ends at
+// Professional (13 tiers).
+const TIER_LADDER = RANK_TIERS
+  .filter(x => x.key !== 'plWorldPro')
+  .slice()
+  .reverse();                       // Novice → Professional
+
 const RANKS = {
-  qskill: {
-    bounds:  [3.1, 6.1, 9.1, 12.1, 16.1, 18.1],
-    keys:    ['rankBeg','rankNov','rankInt','rankAdv','rankLAma','rankUAma','rankPro'],
-    classes: ['iron','bronze','silver','gold','platinum','ruby','diamond'],
-  },
-  bowlard: {
-    bounds:  [30, 60, 100, 140, 180, 210],
-    keys:    ['rankBeg','rankNov','rankInt','rankAdv','rankLAma','rankUAma','rankPro'],
-    classes: ['iron','bronze','silver','gold','platinum','ruby','diamond'],
-  },
+  // Lower bounds taken from the Q Skill / Bowlard columns of the same table,
+  // so a badge and a table row can never disagree.
+  qskill:  { bounds: [3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1, 12.1, 16.1, 18.1] },
+  bowlard: { bounds: [29, 40, 50, 60, 74, 87, 100, 114, 127, 140, 180, 210] },
 };
 
 const QSKILL_BOUNDS  = RANKS.qskill.bounds;
@@ -3746,22 +3491,12 @@ function rankIndexFor(kind, avg) {
 
 function rankFor(kind, avg) {
   const i = rankIndexFor(kind, avg);
+  const tier = TIER_LADDER[i] || TIER_LADDER[TIER_LADDER.length - 1];
   return {
-    label:      t(RANKS[kind].keys[i]),
-    className:  RANKS[kind].classes[i],
+    label:      t(tier.key),
+    className:  tier.cls,
     index:      i,
   };
-}
-
-function rankRangeFor(kind, i) {
-  const b = RANKS[kind].bounds;
-  if (i === 0)            return `~${(b[0] - (kind === 'bowlard' ? 1 : 0.1)).toFixed(kind === 'bowlard' ? 0 : 1)}`;
-  if (i === b.length)     return `${b[b.length - 1]}${kind === 'bowlard' ? '' : '.0'}+`;
-  const lo = b[i - 1];
-  const hi = b[i] - (kind === 'bowlard' ? 1 : 0.1);
-  return kind === 'bowlard'
-    ? `${lo} ~ ${hi}`
-    : `${lo.toFixed(1)} ~ ${hi.toFixed(1)}`;
 }
 
 function nextRankHint(avg, bounds, unitLabel) {
@@ -3771,9 +3506,8 @@ function nextRankHint(avg, bounds, unitLabel) {
     if (avg < bounds[i]) { nextIdx = i; break; }
   }
   const needed = (bounds[nextIdx] - avg).toFixed(1);
-  const rankKeys = ['rankBeg','rankNov','rankInt','rankAdv','rankLAma','rankUAma','rankPro'];
-  const nextKey = rankKeys[nextIdx + 1] || rankKeys[nextIdx];
-  return `${needed} ${unitLabel} ${ICON('arrow-right')} ${t(nextKey)}`;
+  const nextTier = TIER_LADDER[nextIdx + 1] || TIER_LADDER[TIER_LADDER.length - 1];
+  return `${needed} ${unitLabel} ${ICON('arrow-right')} ${t(nextTier.key)}`;
 }
 
 function updateLifetimeStats() {
@@ -3855,12 +3589,13 @@ function updateLifetimeStats() {
 function resetLifetimeDisplay() {
   document.getElementById('lifetimeAvg').textContent = '0.0';
   document.getElementById('lifetimeHigh').textContent = '0';
-  document.getElementById('lifetimeRank').textContent = t('rankBeg');
-  document.getElementById('lifetimeRank').className = 'rank-plate iron';
+  document.getElementById('lifetimeRank').textContent = t(TIER_LADDER[0].key);
+  document.getElementById('lifetimeRank').className = 'rank-plate ' + TIER_LADDER[0].cls;
   document.getElementById('lifetimeInnings').textContent = '0';
   document.getElementById('lifetimeNextRank').textContent = '';
   document.getElementById('lifetimeFouls').textContent = t('none');
   document.getElementById('lifetimeMistakes').textContent = t('none');
+  renderRanksTable();
 }
 
 function getRank(avg)          { return rankFor('qskill',  avg || 0); }
@@ -4509,7 +4244,11 @@ function setTDFUnit() {
 function bindEvents() {
   document.getElementById('langSelect').addEventListener('change', e => setLanguage(e.target.value));
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-  document.getElementById('playerSelect').addEventListener('change', () => { updateEditDeleteButtons(); updateLifetimeStats(); renderHistory(); });
+  document.getElementById('playerSelect').addEventListener('change', () => {
+    updateEditDeleteButtons(); updateLifetimeStats(); renderHistory();
+    // In the RDS view the same selector drives the level and the RDS 100 clock.
+    if (rdsView) { rdsSyncPlayerSelect(); const rec = rdsRecordFor(rdsPlayerId); rdsLevel = rec ? rec.level : RDS_MIN_LEVEL; renderRds(); rds100Arm(); }
+  });
   document.getElementById('tableSelect').addEventListener('change', () => { updateEditDeleteButtons(); updateUI(); });
   document.getElementById('btnAddPlayer').addEventListener('click', showAddPlayer);
   document.getElementById('btnEditPlayer').addEventListener('click', showEditPlayer);
@@ -4589,6 +4328,17 @@ function bindEvents() {
 
   document.querySelectorAll('input[name="gameMode"]').forEach(r => {
     r.addEventListener('change', e => {
+      // RDS is a reference view, not a scoring mode: it never becomes
+      // currentMode and never touches the saved setup.
+      if (e.target.value === 'rds') {
+        rdsView = true;
+        applyViewMode();
+        return;
+      }
+      if (rdsView) {
+        rdsView = false;
+        document.body.classList.remove('rds-view');
+      }
       // Mode is locked while a session runs (updateSetupLock).
       const prevTgt = parseInt(document.getElementById('targetScore').value);
       if (!isNaN(prevTgt)) {
@@ -4611,6 +4361,90 @@ function bindEvents() {
       saveData();
     });
   });
+
+  // RDS level picker (delegated: the chips are rebuilt on every render).
+  const rdsChipsEl = document.getElementById('rdsChips');
+  if (rdsChipsEl) {
+    rdsChipsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.rds-chip');
+      if (btn) rdsSetLevel(parseInt(btn.dataset.rds, 10));
+    });
+  }
+
+  // Rating tables: tap a row to show that tier's description.
+  ['rdsRankBody', 'rankTiersBody'].forEach(function (id) {
+    const body = document.getElementById(id);
+    if (!body) return;
+    body.addEventListener('click', e => {
+      const row = e.target.closest('.rds-rank-row');
+      if (!row) return;
+      const desc = body.querySelector('.rds-rank-desc[data-idx="' + row.dataset.idx + '"]');
+      if (desc) desc.hidden = !desc.hidden;
+    });
+  });
+
+  // RDS record: round logging. The player comes from the shared selector.
+  const rdsLogEl = document.getElementById('rdsLogBtns');
+  if (rdsLogEl) {
+    rdsLogEl.addEventListener('click', e => {
+      const btn = e.target.closest('[data-racks]');
+      if (btn) rdsLogRound(parseInt(btn.dataset.racks, 10));
+    });
+  }
+
+  // History lives behind a button so the card stays compact.
+  const rdsHistEl = document.getElementById('rdsHistBtn');
+  if (rdsHistEl) {
+    rdsHistEl.addEventListener('click', () => {
+      const rec = rdsRecordFor(rdsPlayerId);
+      const rows = rec ? rec.attempts.slice(0, RDS_HIST_MAX).map(rdsRoundRowHtml) : [];
+      rdsShowHistory(t('rdsHistory'), rows, t('rdsNoRecord'));
+    });
+  }
+
+  // RDS first-run level picker + "change level" link.
+  const rdsStartOk = document.getElementById('rdsStartOk');
+  if (rdsStartOk) {
+    rdsStartOk.addEventListener('click', () => {
+      const sel = document.getElementById('rdsStartLevel');
+      rdsSetLevelForPlayer(rdsPlayerId, sel ? parseInt(sel.value, 10) : RDS_MIN_LEVEL);
+    });
+  }
+  const rdsChangeEl = document.getElementById('rdsChangeLevel');
+  if (rdsChangeEl) {
+    rdsChangeEl.addEventListener('click', () => {
+      const rec = rdsRecordFor(rdsPlayerId);
+      const sel = document.getElementById('rdsStartLevel');
+      if (sel && rec) sel.value = String(rec.level);
+      rdsChanging = true;
+      renderRds();
+    });
+  }
+
+  // RDS 100 — start / pause / end and the "balls left" picker.
+  const rds100StartEl = document.getElementById('rds100Start');
+  if (rds100StartEl) {
+    rds100StartEl.addEventListener('click', () => rds100NewGame(rds100PickedLevel()));
+  }
+  const rds100PauseEl = document.getElementById('rds100Pause');
+  if (rds100PauseEl) {
+    rds100PauseEl.addEventListener('click', () => rds100PauseToggle());
+  }
+  const rds100EndEl = document.getElementById('rds100End');
+  if (rds100EndEl) {
+    rds100EndEl.addEventListener('click', () => rds100EndGame());
+  }
+  const rds100ClearEl = document.getElementById('rds100Clear');
+  if (rds100ClearEl) {
+    rds100ClearEl.addEventListener('click', rds100ClearHistory);
+  }
+  const rds100BallsEl = document.getElementById('rds100Balls');
+  if (rds100BallsEl) {
+    rds100BallsEl.addEventListener('click', e => {
+      const btn = e.target.closest('[data-left]');
+      if (btn) rds100Choose(parseInt(btn.dataset.left, 10));
+    });
+  }
 
   document.querySelectorAll('input[name="tdfUnit"]').forEach(r =>
     r.addEventListener('change', setTDFUnit)
@@ -4645,6 +4479,4 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
-</script>
 
-</body></html>

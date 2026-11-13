@@ -383,13 +383,22 @@ ol { padding-left:22px; margin-top:8px; color:var(--text-secondary); font-size:1
 }
 #lifetimeNextRank { color: var(--text-secondary);}
 .rank-plate { display:inline-block; padding:4px 22px; border-radius:40px; font-weight:600; font-size:1.5rem; letter-spacing:.02em; }
-.rank-plate.iron { background:#607D8B; color:#fff; }
-.rank-plate.bronze { background:#CD7F32; color:#fff; }
-.rank-plate.silver { background:#C0C0C0; color:#1e1e1e; }
-.rank-plate.gold { background:#FFD700; color:#1e1e1e; }
-.rank-plate.platinum { background:#E5E4E2; color:#1e1e1e; }
-.rank-plate.ruby { background:#9B111E; color:#fff; }
-.rank-plate.diamond { background:#B9F2FF; color:#1e1e1e; }
+/* Rank palette: one colour family per level, light -> dark from Lower to
+   Upper. Novice sits at the bottom (white) and World Class on top (black). */
+.rank-plate.r-nov   { background:#FFFFFF; color:#1e1e1e; box-shadow:inset 0 0 0 1px #C9C9C9; }
+.rank-plate.r-beg-l { background:#BFE3B8; color:#12300D; }
+.rank-plate.r-beg-m { background:#6FB268; color:#08210A; }
+.rank-plate.r-beg-u { background:#2E7A34; color:#fff; }
+.rank-plate.r-int-l { background:#F8EDA6; color:#3A3200; }
+.rank-plate.r-int-m { background:#E8C63A; color:#332B00; }
+.rank-plate.r-int-u { background:#B08A15; color:#fff; }
+.rank-plate.r-adv-l { background:#F4A9A9; color:#3D0B0B; }
+.rank-plate.r-adv-m { background:#D64545; color:#fff; }
+.rank-plate.r-adv-u { background:#9B1F1F; color:#fff; }
+.rank-plate.r-ama-l { background:#7DF9FF; color:#00363D; }
+.rank-plate.r-ama-u { background:#008080; color:#fff; }
+.rank-plate.r-pro   { background:#6B3FA0; color:#fff; }
+.rank-plate.r-wc    { background:#111111; color:#E8C63A; border:1px solid #E8C63A; }
 .history-item { background:var(--bg-card-alt); border:1px solid var(--border-light); border-radius:16px; padding:16px 20px; margin-bottom:12px; transition:.2s; }
 .history-item:hover { border-color:var(--border-focus); }
 .history-header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
@@ -690,23 +699,11 @@ ol { padding-left:22px; margin-top:8px; color:var(--text-secondary); font-size:1
 
 /*rank tabel*/
 .ranks-table td:first-child { color: var(--text-primary); }
-.ranks-table tr.current td {
-  background: var(--stats-chip-bg);
-  border-left: 3px solid var(--accent-gold);
-}
-.ranks-table tr.current td:first-child {
-  padding-left: 6px;
-}
 .ranks-table td:nth-child(2),
-.ranks-table td:nth-child(3) {
+.ranks-table td:nth-child(3),
+.ranks-table td:nth-child(5) {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-}
-.ranks-table td:last-child {
-  text-align: left;
-  white-space: normal;
-  color: var(--text-secondary);
-  font-size: .95rem;
 }
 
 .ranks-toggle {
@@ -838,3 +835,358 @@ ol { padding-left:22px; margin-top:8px; color:var(--text-secondary); font-size:1
   }
   .card-header-row .card-actions { width: auto; }
 }
+
+/* ============================================================
+   RDS reference view
+   Selecting Mode: RDS swaps the page for the Runout Drill System
+   reference. Only the setup bar (trimmed to the Mode switch) and
+   the RDS card stay on screen.
+   ============================================================ */
+.rds-view #rdsCard { display:block !important; }
+
+/* Hide every direct child of the app column except the setup bar, the RDS
+   card, the site header and the bottom grid (links + TDF calculator). */
+.rds-view #app > *:not(#setupCard):not(#rdsCard):not(.header):not(#bottomGrid) { display:none !important; }
+
+/* Keep only what the reference needs from the setup bar. Player, Table and
+   the TOF switch stay: RDS shares the player selector and RDS 100 is scored
+   through the table difficulty factor. */
+.rds-view #targetGroup,
+.rds-view #sessionTypeGroup,
+.rds-view #bowlardInputModeGroup,
+.rds-view #tdfGroup,
+.rds-view #btnStart { display:none !important; }
+
+/* ---- header: title on the left, level picker on the right ---- */
+.rds-card { display:none; }
+.rds-head {
+  display:flex; flex-wrap:wrap; gap:14px 24px;
+  justify-content:space-between; align-items:flex-start;
+  margin-bottom:16px;
+}
+
+.rds-levelpick { display:flex; flex-direction:column; gap:6px; }
+.rds-picklabel {
+  font-size:0.72rem; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--text-muted);
+}
+.rds-chips { display:flex; flex-wrap:wrap; gap:6px; }
+
+.rds-chip {
+  min-width:38px; height:34px; padding:0 10px;
+  border-radius:9px; border:1px solid var(--border-light);
+  background:var(--bg-card-alt); color:var(--text-primary);
+  font:600 0.9rem/1 "Segoe UI", system-ui, sans-serif;
+  cursor:pointer; transition:background .15s, border-color .15s, color .15s;
+}
+.rds-chip:hover { border-color:var(--border-focus); }
+.rds-chip.active { background:var(--accent-blue); border-color:var(--accent-blue); color:#fff; }
+
+/* ---- rack figure + text ---- */
+.rds-body {
+  display:grid; grid-template-columns:minmax(180px,240px) 1fr;
+  gap:22px; align-items:start;
+}
+.rds-rackwrap {
+  border:1px solid var(--border-light); border-radius:12px;
+  padding:14px 10px 10px; background:var(--bg-card-alt);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.rds-rack { width:100%; display:flex; justify-content:center; }
+.rds-rack-svg { width:100%; max-width:220px; height:auto; display:block; }
+
+.rds-main { display:flex; flex-direction:column; gap:14px; min-width:0; }
+.rds-leveltitle {
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+}
+.rds-lvlnum {
+  font:700 1.45rem/1.1 "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  letter-spacing:.4px; color:var(--text-primary);
+}
+/* The level badge reuses the tracker's rank plate, scaled to sit next to the
+   "LEVEL n" heading. */
+.rds-leveltitle .rank-plate { font-size:1.05rem; padding:3px 16px; }
+
+.rds-rules { margin:0; padding-left:1.15rem; display:flex; flex-direction:column; gap:6px; }
+.rds-rules li { font-size:0.95rem; line-height:1.45; color:var(--text-secondary); }
+
+.rds-meta {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(118px, 1fr));
+  gap:10px 14px; border-top:1px solid var(--border-light); padding-top:12px;
+}
+.rds-cell { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.rds-celllabel {
+  font-size:0.72rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--text-muted);
+}
+.rds-cellvalue { font-size:0.95rem; font-weight:600; color:var(--text-primary); }
+
+/* ---- footer notes ---- */
+.rds-foot {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:16px 22px; margin-top:22px;
+  border-top:1px solid var(--border-light); padding-top:16px;
+}
+.rds-footblock h3 {
+  font-size:0.82rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--text-muted); margin-bottom:5px; font-weight:700;
+}
+.rds-footblock p { font-size:0.86rem; line-height:1.5; color:var(--text-secondary); }
+
+@media (max-width:819px) {
+  .rds-body { grid-template-columns:1fr; gap:16px; }
+  .rds-rack-svg { max-width:160px; }
+  .rds-chip { min-width:34px; height:32px; font-size:0.85rem; }
+  .rds-lvlnum { font-size:1.25rem; }
+  .rds-rules li { font-size:0.9rem; }
+  .rds-foot { grid-template-columns:1fr; gap:12px; }
+}
+
+/* ---- per-player record: sits in the setup card, styled like its fields ---- */
+.rds-record {
+  margin-top:14px;
+  display:flex; flex-direction:column; gap:12px;
+}
+/* It lives inside the setup card now, so it must stay hidden in the
+   tracker modes and only appear in the RDS reference. */
+body:not(.rds-view) .rds-record { display:none !important; }
+.rds-curlevel {
+  font:700 1.35rem/1 "Bahnschrift","Segoe UI",system-ui,sans-serif;
+  color:var(--accent-blue);
+  min-width:24px;
+}
+/* Secondary action sized like the row's other controls, not a bare link. */
+.rds-linkbtn {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:8px 16px; min-height:44px; margin-left:2px;
+  font-family:inherit; font-size:1.2rem; font-weight:600;
+  color:var(--text-secondary);
+  background:transparent; border:1px solid var(--border-light);
+  border-radius:30px; cursor:pointer; transition:.2s;
+}
+.rds-linkbtn:hover { border-color:var(--border-focus); color:var(--accent-blue); }
+.rds-histbtn {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  padding:8px 18px; min-height:44px;
+  font-family:inherit; font-size:1.2rem; font-weight:600;
+  color:var(--text-primary); background:var(--bg-card-alt);
+  border:1px solid var(--border-light); border-radius:30px; cursor:pointer;
+  transition:.2s;
+}
+.rds-histbtn:hover:not(:disabled) { border-color:var(--border-focus); color:var(--accent-blue); }
+.rds-histbtn:disabled { opacity:.4; cursor:not-allowed; }
+.modal-box.modal-rds-hist { max-width:560px; width:calc(100% - 32px); }
+.modal-rds-hist .rds-history { max-height:52vh; }
+/* Only the first-run block keeps the small caption style. */
+.rds-record-label {
+  font-size:.72rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--text-muted); font-weight:700;
+}
+
+.rds-log-btns { display:flex; flex-wrap:wrap; gap:6px; }
+.rds-logbtn {
+  min-width:0; min-height:44px; padding:8px 16px;
+  display:inline-flex; align-items:baseline; gap:1px; justify-content:center;
+  border-radius:30px; border:1px solid var(--border-light);
+  background:var(--bg-card-alt); color:var(--text-primary);
+  font-family:inherit; font-size:1.35rem; font-weight:600; cursor:pointer;
+  transition:background .15s, border-color .15s, color .15s;
+}
+.rds-logbtn span { font-weight:400; font-size:.8em; color:var(--text-muted); }
+.rds-logbtn:hover { border-color:var(--border-focus); }
+.rds-logbtn:hover span { color:inherit; }
+
+.rds-histwrap { display:flex; flex-direction:column; gap:6px; }
+.rds-history {
+  display:flex; flex-direction:column; gap:4px;
+  max-height:216px; overflow-y:auto;
+}.rds-hrow {
+  display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px;
+  font-size:.86rem; padding:6px 10px; border-radius:8px;
+  background:var(--stats-chip-bg); border:1px solid var(--border-light);
+}
+.rds-hdate { color:var(--text-muted); font-variant-numeric:tabular-nums; }
+.rds-hlvl { font-weight:600; }
+.rds-hracks { color:var(--text-secondary); }
+.rds-badge {
+  margin-left:auto; padding:1px 9px; border-radius:999px;
+  font-size:.76rem; font-weight:700; white-space:nowrap;
+}
+.rds-badge-up   { background:rgba(29,155,90,.18);  color:var(--accent-green); }
+.rds-badge-stay { background:rgba(128,126,113,.20); color:var(--text-muted); }
+.rds-badge-down { background:rgba(207,58,0,.18);    color:var(--accent-red); }
+.rds-empty { font-size:.86rem; color:var(--text-muted); padding:4px 0; }
+
+@media (max-width:819px) {
+  #rdsRecordTop .field-group { flex:1 1 auto; }
+  .rds-logbtn { flex:1 1 60px; }
+  .rds-histbtn { flex:1 1 100%; }
+  .rds-history { max-height:none; }
+}
+
+/* The dotted chip marks the player's recorded level, independent of the
+   blue "currently viewed" chip. */
+.rds-chip { position:relative; }
+.rds-chip.is-current:not(.active) { border-color:var(--accent-blue); color:var(--accent-blue); }
+.rds-chip.is-current::after {
+  content:''; position:absolute; left:50%; bottom:3px; transform:translateX(-50%);
+  width:4px; height:4px; border-radius:50%; background:currentColor;
+}
+
+/* First-run level setup inside the RDS record panel. */
+.rds-setup {
+  display:flex; flex-wrap:wrap; gap:10px 18px;
+  align-items:center; justify-content:space-between;
+  border:1px solid var(--border-light); border-radius:12px;
+  background:var(--bg-card-alt); padding:12px 14px; margin-bottom:14px;
+}
+.rds-setup-text { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.rds-setup-text strong { font-size:.95rem; color:var(--text-primary); }
+.rds-setup-text span { font-size:.82rem; line-height:1.4; color:var(--text-muted); }
+.rds-setup-ctl { display:flex; align-items:center; gap:8px; }
+#rdsStartLevel {
+  background:var(--bg-primary); border:1px solid var(--border-light);
+  border-radius:30px; padding:8px 14px; color:var(--text-primary);
+  font-family:inherit; font-size:.92rem; min-height:40px; min-width:190px;
+  cursor:pointer;
+}
+.rds-setup-ok {
+  background:var(--accent-blue); border:1px solid var(--accent-blue);
+  color:#fff; border-radius:30px; padding:8px 18px; font-family:inherit;
+  font-size:.92rem; font-weight:700; min-height:40px; cursor:pointer;
+  transition:filter .15s;
+}
+.rds-setup-ok:hover { filter:brightness(1.08); }
+
+/* ---- RDS 100: the scored variant ---- */
+.rds-hundred {
+  margin-top:18px;
+  border-top:1px solid var(--border-light);
+  padding-top:16px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.rds100-top { display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
+.rds100-top h3 { margin:0; font-size:1rem; letter-spacing:.02em; }
+.rds100-live { display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; margin-left:auto; }
+.rds100-stat { display:flex; flex-direction:column; align-items:flex-start; gap:1px; }
+.rds100-stat b {
+  font:700 1.5rem/1 "Bahnschrift","Segoe UI",system-ui,sans-serif;
+  color:var(--accent-blue); font-variant-numeric:tabular-nums;
+}
+.rds100-stat span {
+  font-size:.68rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--text-muted); font-weight:700;
+}
+.rds100-time {
+  font:700 1rem/1 "Bahnschrift","Segoe UI",system-ui,sans-serif;
+  color:var(--text-secondary); font-variant-numeric:tabular-nums;
+  min-width:52px;
+}
+.rds-pill {
+  min-height:36px; padding:0 16px; border-radius:30px;
+  border:1px solid var(--border-light); background:var(--bg-card-alt);
+  color:var(--text-primary); font-family:inherit; font-size:.86rem;
+  font-weight:600; cursor:pointer; transition:background .15s, border-color .15s;
+}
+.rds-pill:hover { border-color:var(--border-focus); }
+.rds-pill.is-on { border-color:var(--accent-blue); color:var(--accent-blue); }
+.rds-pill-danger { border-color:rgba(207,58,0,.45); color:var(--accent-red); }
+.rds-pill-danger:hover { background:rgba(207,58,0,.12); border-color:var(--accent-red); }
+
+.rds100-idle { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:flex-end; }
+#rds100Level {
+  padding:8px 16px; font-size:.92rem; min-height:40px; min-width:180px;
+  background:var(--bg-card-alt); border:1px solid var(--border-light);
+  border-radius:30px; color:var(--text-primary);
+  font-family:inherit; cursor:pointer;
+}
+.rds100-play { display:flex; flex-direction:column; gap:8px; }
+.rds100-balls { display:flex; flex-wrap:wrap; gap:6px; }
+.rds100-ball {
+  min-width:44px; height:40px; padding:0 12px;
+  border-radius:9px; border:1px solid var(--border-light);
+  background:var(--bg-card-alt); color:var(--text-primary);
+  font:700 1rem/1 "Segoe UI", system-ui, sans-serif; cursor:pointer;
+  font-variant-numeric:tabular-nums;
+  transition:background .15s, border-color .15s;
+}
+.rds100-ball:hover { border-color:var(--accent-blue); color:var(--accent-blue); }
+.rds100-histwrap { display:flex; flex-direction:column; gap:6px; }
+
+@media (max-width:819px) {
+  .rds100-live { margin-left:0; width:100%; gap:10px 16px; }
+  .rds100-stat b { font-size:1.3rem; }
+  .rds100-ball { flex:1 1 44px; }
+  .rds100-histwrap .rds-history { max-height:none; }
+}
+
+/* ---- RDS: rating comparison table ---- */
+.rds-ranks {
+  margin-top:18px; padding-top:16px;
+  border-top:1px solid var(--border-light);
+}
+.rds-ranks-head {
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px;
+  margin-bottom:10px;
+}
+.rds-ranks-head h3 { font-size:1.1rem; }
+.rds-ranks-hint { font-size:.82rem; color:var(--text-secondary); }
+.rds-rank-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+.rds-rank-table th {
+  text-align:left; padding:6px 8px; white-space:nowrap;
+  font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--text-secondary); border-bottom:1px solid var(--border-light);
+}
+.rds-rank-table td {
+  padding:5px 8px; border-bottom:1px solid var(--border-light);
+  vertical-align:middle; white-space:nowrap;
+}
+.rds-rank-table .rank-plate { font-size:.78rem; padding:2px 12px; }
+.rds-rank-row { cursor:pointer; }
+.rds-rank-row:hover td { background:var(--bg-card-alt); }
+/* The row that matches the player / the level on screen: tint it, bar it and
+   ring the plate so it is obvious at a glance. */
+.rds-rank-row.current td {
+  background:var(--stats-chip-bg);
+  font-weight:700;
+}
+.rds-rank-row.current td:first-child { box-shadow:inset 4px 0 0 var(--accent-blue); }
+.rds-rank-row.current .rank-plate { outline:2px solid var(--accent-blue); outline-offset:1px; }
+.rds-cur-dot {
+  display:inline-block; width:8px; height:8px; margin-right:7px;
+  border-radius:50%; background:var(--accent-blue); vertical-align:middle;
+}
+.rds-rank-desc td {
+  white-space:normal; background:var(--bg-card-alt);
+  font-size:.88rem; line-height:1.6; color:var(--text-primary);
+  padding:10px 12px;
+}
+.rds-rank-desc p { margin:6px 0 0; }
+.rds-tag {
+  display:inline-block; margin-right:12px;
+  font-size:.76rem; font-weight:600; color:var(--text-primary);
+}
+@media (max-width:819px) {
+  /* Six columns don't fit a phone: keep the cells legible and let the table
+     scroll sideways instead of letting the text collide. */
+  .rds-ranks { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .rds-rank-table { min-width:560px; font-size:.8rem; }
+  .rds-rank-table th, .rds-rank-table td { padding:5px 6px; }
+  .rds-rank-table .rank-plate { font-size:.72rem; padding:2px 9px; }
+}
+
+
+/* RDS 100 live stats: the adjusted score sits next to the raw one, and the
+   table name is shown so a score can be traced to its difficulty. */
+.rds100-adj { font-style:normal; font-size:.78rem; color:var(--text-muted); font-weight:600; margin-left:2px; }
+.rds100-table { font-size:.95rem !important; font-weight:700; white-space:nowrap; }
+.rds-hmuted { color:var(--text-muted); }
+
+/* Clear button for the RDS 100 history, aligned with its label. */
+.rds100-histhead { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.rds100-clear {
+  font-family:inherit; font-size:.86rem; font-weight:600; color:var(--text-muted);
+  background:transparent; border:1px solid var(--border-light); border-radius:20px;
+  padding:4px 12px; cursor:pointer; transition:.2s;
+}
+.rds100-clear:hover { color:var(--danger, #c0392b); border-color:currentColor; }
