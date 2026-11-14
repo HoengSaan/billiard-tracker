@@ -707,7 +707,7 @@ function showSessionSummary(s) {
     </div>`;
 
   modalSummary({
-    html: headerHTML + tableHTML + targetHTML + breakdownHTML,
+    html: headerHTML + '<div class="table-scroll">' + tableHTML + '</div>' + targetHTML + breakdownHTML,
     autoCloseMs: 30000,
     closeLabel: t('closeWithSeconds'),
   });
@@ -1678,6 +1678,11 @@ function computeBowlardHighRun(frames) {
     }
   });
 
+  // A run keeps adding rolls until something ends it: a zero, or the roll that
+  // closes an open frame. A spare restarts the count from its own pins, so a
+  // spare followed by the next first roll forms one run (e.g. spare 3 + 5 = 8).
+  // The roll that closes an open frame never continues a run, but it is still
+  // a visit of its own, so it can be the high run by itself.
   let running = 0, high = 0;
   let bestStart = -1, bestEnd = -1, curStart = 0;
 
@@ -1691,6 +1696,11 @@ function computeBowlardHighRun(frames) {
     }
 
     if (r.kind === 'open') {
+      if (r.pins > high) {
+        high = r.pins;
+        bestStart = k;
+        bestEnd = k;
+      }
       running = 0;
       curStart = k + 1;
       continue;
