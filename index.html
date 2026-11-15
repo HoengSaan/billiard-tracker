@@ -122,6 +122,11 @@
         <path d="M3 16h3a2 2 0 0 1 2 2v3" />
         <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
       </symbol>
+      <symbol id="sliders" viewBox="0 0 24 24">
+        <path d="M21 4h-7" /><path d="M10 4H3" /><path d="M21 12h-9" />
+        <path d="M8 12H3" /><path d="M21 20h-5" /><path d="M12 20H3" />
+        <path d="M14 2v4" /><path d="M8 10v4" /><path d="M16 18v4" />
+      </symbol>
       <symbol id="info" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4" />
@@ -323,22 +328,15 @@
     <div class="rds-ranks">
       <div class="rds-ranks-head">
         <h3 data-i18n="rdsRankTable">Rating comparison</h3>
-        <span class="rds-ranks-hint" data-i18n="rdsDescHint">Tap a level to see the description.</span>
+        <button type="button" class="rank-cols-btn" data-ranks-cols
+                aria-label="Columns" title="Columns"><svg class="icon" aria-hidden="true"><use href="#sliders"></use></svg></button>
       </div>
+      <div class="table-scroll">
       <table class="rds-rank-table">
-        <thead>
-          <tr>
-            <th data-i18n="rdsColLevel">Level</th>
-            <th>RDS</th>
-            <th data-i18n="rdsColBu">BU score</th>
-            <th data-i18n="rdsColAbcd">ABCD</th>
-            <th data-i18n="rdsColFargo">Fargo</th>
-            <th data-i18n="rdsColQSkill">Q Skill</th>
-            <th data-i18n="rdsColBowlard">Bowlard</th>
-          </tr>
-        </thead>
+        <thead id="rdsRankHead"></thead>
         <tbody id="rdsRankBody"></tbody>
       </table>
+      </div>
     </div>
   </div>
 
@@ -492,19 +490,13 @@
           </ol>
         </div>
       </div>
+      <div class="rank-cols-row">
+        <button type="button" class="rank-cols-btn" data-ranks-cols
+                aria-label="Columns" title="Columns"><svg class="icon" aria-hidden="true"><use href="#sliders"></use></svg></button>
+      </div>
       <div class="table-scroll">
       <table class="summary-table ranks-table rds-rank-table">
-        <thead>
-          <tr>
-            <th data-i18n="rdsColLevel">Level</th>
-            <th>RDS</th>
-            <th data-i18n="rdsColBu">BU score</th>
-            <th data-i18n="rdsColAbcd">ABCD</th>
-            <th data-i18n="rdsColFargo">Fargo</th>
-            <th id="ranksColQSkill" data-i18n="rdsColQSkill" class="col-active">Q Skill</th>
-            <th id="ranksColBowlard" data-i18n="rdsColBowlard">Bowlard</th>
-          </tr>
-        </thead>
+        <thead id="rankTiersHead"></thead>
         <tbody id="rankTiersBody"></tbody>
       </table>
       </div>

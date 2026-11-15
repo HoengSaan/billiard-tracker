@@ -1208,4 +1208,33 @@ body:not(.rds-view) .rds-record { display:none !important; }
 }
 .rds-ranks { overflow-x:auto; max-width:100%; }
 
+/* ---- Rating table: column chooser + merged level cell ---- */
+.rank-cols-row { display:flex; justify-content:flex-end; margin-bottom:6px; }
+.rank-cols-btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:36px; height:36px; padding:0; cursor:pointer;
+  background:transparent; border:1px solid var(--border-light);
+  border-radius:10px; color:var(--text-secondary);
+  transition:.2s;
+}
+.rank-cols-btn:hover { border-color:var(--border-focus); color:var(--accent-blue); }
+.rank-cols-btn .icon { width:18px; height:18px; }
+.rds-ranks-head .rank-cols-btn { margin-left:auto; }
+
+/* Level + RDS share one cell; the number sits right after the badge. */
+.rds-lvl {
+  display:inline-block; margin-left:8px;
+  font-weight:700; color:var(--text-secondary); font-size:.9em;
+}
+
+.modal-box.modal-rank-cols { max-width:400px; min-width:0; }
+.rank-cols-list { display:flex; flex-direction:column; gap:2px; margin:6px 0 10px; }
+.rank-cols-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 6px; border-radius:8px; cursor:pointer;
+  font-size:1rem; color:var(--text-primary);
+}
+.rank-cols-item:hover { background:var(--bg-card-alt); }
+.rank-cols-item input { width:18px; height:18px; accent-color:var(--accent-blue); cursor:pointer; }
+
 

@@ -890,6 +890,30 @@ function setLanguage(lang) {
 // ============================================================
 // INIT
 // ============================================================
+// Puts the setup bar back the way the player left it. Player and table are
+// restored by renderPlayers/renderTables from the same lastUsed record.
+function restoreSetupFromLastUsed() {
+  const lu = appData.lastUsed || {};
+  if (lu.gameMode === 'bowlard' || lu.gameMode === 'standard') {
+    currentMode = lu.gameMode;
+    const r = document.querySelector(`input[name="gameMode"][value="${currentMode}"]`);
+    if (r) r.checked = true;
+  }
+  if (lu.sessionType) {
+    const r = document.querySelector(`input[name="sessionType"][value="${lu.sessionType}"]`);
+    if (r) {
+      document.querySelectorAll('input[name="sessionType"]').forEach(x => {
+        x.disabled = (currentMode === 'bowlard');
+      });
+      r.checked = true;
+    }
+  }
+  if (lu.bowlardInputMode) {
+    const r = document.querySelector(`input[name="bowlardInputMode"][value="${lu.bowlardInputMode}"]`);
+    if (r) r.checked = true;
+  }
+}
+
 function init() {
   const savedLang = localStorage.getItem('qskill-language');
   if (savedLang && LANG[savedLang]) currentLang = savedLang;
@@ -900,6 +924,7 @@ function init() {
 
   loadData();
   ensureDefaults();
+  restoreSetupFromLastUsed();
   applyTargetForMode(currentMode);
   buildScoreGrids();
   renderPlayers();
@@ -974,6 +999,12 @@ function persistData() {
 function saveData() {
   appData.lastUsed.playerId  = document.getElementById('playerSelect').value || '';
   appData.lastUsed.tableId   = document.getElementById('tableSelect').value  || '';
+  // Remember the whole setup bar, so a reload lands on the same configuration.
+  appData.lastUsed.gameMode = currentMode;
+  const st = document.querySelector('input[name="sessionType"]:checked');
+  if (st) appData.lastUsed.sessionType = st.value;
+  const bi = document.querySelector('input[name="bowlardInputMode"]:checked');
+  if (bi) appData.lastUsed.bowlardInputMode = bi.value;
   const tgt = parseInt(document.getElementById('targetScore').value);
   if (!isNaN(tgt)) {
     if (currentMode === 'bowlard') appData.lastUsed.targetBowlard  = tgt;
@@ -2363,44 +2394,94 @@ const RANK_TIERS = [
   { key:'plNov',        cls:'r-nov',   levels:[1,2,3],   bu:'0~19',    abcd:'D--',             fargo:'0~200',     q:'~3.0',      b:'~29',     ars:'1, 2',   cn:'0',      desc:'tdNov' }
 ];
 
+// ---- Rating comparison table: player-choosable columns -------------------
+// The level column is always shown; it carries the tier badge together with
+// the RDS level(s) it maps to. Every other column can be switched on or off
+// from the Columns button, and the choice is remembered in appData.
+const RANK_COLS = [
+  { k:'bu',    key:'rdsColBu' },
+  { k:'abcd',  key:'rdsColAbcd' },
+  { k:'fargo', key:'rdsColFargo' },
+  { k:'q',     key:'rdsColQSkill' },
+  { k:'b',     key:'rdsColBowlard' },
+  { k:'ars',   key:'rdsColArs' },
+  { k:'cn',    key:'rdsColCn' }
+];
+const RANK_COLS_DEFAULT = ['bu', 'abcd', 'fargo', 'q', 'b'];
+
+function rankColsSel() {
+  const saved = (appData && Array.isArray(appData.rankCols)) ? appData.rankCols : null;
+  if (!saved) return RANK_COLS_DEFAULT.slice();
+  const picked = RANK_COLS.map(c => c.k).filter(k => saved.indexOf(k) !== -1);
+  return picked.length ? picked : RANK_COLS_DEFAULT.slice();
+}
+
+function rankColsToggle(k, on) {
+  const cur = rankColsSel();
+  const next = on
+    ? (cur.indexOf(k) === -1 ? cur.concat(k) : cur.slice())
+    : cur.filter(x => x !== k);
+  if (!next.length) return;   // never let the player hide every column
+  appData.rankCols = RANK_COLS.map(c => c.k).filter(x => next.indexOf(x) !== -1);
+  persistData();
+  renderRdsRankTable();
+  renderRanksTable();
+}
+
+// Merged level column: the tier badge plus the RDS level it starts at.
 function rdsLevelRange(tier) {
   const l = tier.levels;
-  return l.length > 1 ? `${l[0]}–${l[l.length - 1]}` : String(l[0]);
+  return l.length > 1 ? '~' + l[l.length - 1] : String(l[0]);
+}
+
+function rankColIsActive(k, activeCol) {
+  return (k === 'q' && activeCol === 'qskill') || (k === 'b' && activeCol === 'bowlard');
+}
+
+function rankTierHead(activeCol) {
+  const cols = rankColsSel();
+  let out = `<th data-i18n="rdsColLevel">${escapeHtml(t('rdsColLevel'))}</th>`;
+  RANK_COLS.forEach(c => {
+    if (cols.indexOf(c.k) === -1) return;
+    const cls = rankColIsActive(c.k, activeCol) ? ' class="col-active"' : '';
+    out += `<th${cls} data-i18n="${c.key}">${escapeHtml(t(c.key))}</th>`;
+  });
+  return out;
 }
 
 // Rows for the 14-tier comparison table. `curIdx` marks the row to highlight;
 // `activeCol` marks which Q Skill / Bowlard column belongs to the open mode.
 function rankTierRows(curIdx, activeCol) {
-  const qCls = activeCol === 'qskill'  ? ' class="col-active"' : '';
-  const bCls = activeCol === 'bowlard' ? ' class="col-active"' : '';
+  const cols = rankColsSel();
+  const span = cols.length + 1;
   return RANK_TIERS.map((tier, i) => {
-    // The column shows only the primary ABCD grade; the full list (e.g.
-    // "A++ / AAAA / SS") stays in the expanded description.
-    const abcdShort = String(tier.abcd).split(' / ')[0];
     const isCur = i === curIdx;
-    return `<tr class="rds-rank-row${isCur ? ' current' : ''}" data-idx="${i}">`
-      + `<td>${isCur ? '<span class="rds-cur-dot"></span>' : ''}<span class="rank-plate ${tier.cls}">${escapeHtml(t(tier.key))}</span></td>`
-      + `<td>${escapeHtml(rdsLevelRange(tier))}</td>`
-      + `<td>${escapeHtml(tier.bu)}</td>`
-      + `<td>${escapeHtml(abcdShort)}</td>`
-      + `<td>${escapeHtml(tier.fargo)}</td>`
-      + `<td${qCls}>${escapeHtml(tier.q)}</td>`
-      + `<td${bCls}>${escapeHtml(tier.b)}</td>`
-      + `</tr>`
-      + `<tr class="rds-rank-desc" data-idx="${i}" hidden><td colspan="7">`
-      + `<span class="rds-tag">ABCD ${escapeHtml(tier.abcd)}</span>`
-      + `<span class="rds-tag">ARS ${escapeHtml(tier.ars)}</span>`
-      + `<span class="rds-tag">CN ${escapeHtml(tier.cn)}</span>`
+    let cells = `<td>${isCur ? '<span class="rds-cur-dot"></span>' : ''}`
+      + `<span class="rank-plate ${tier.cls}">${escapeHtml(t(tier.key))}</span>`
+      + `<span class="rds-lvl">${escapeHtml(rdsLevelRange(tier))}</span></td>`;
+    RANK_COLS.forEach(c => {
+      if (cols.indexOf(c.k) === -1) return;
+      let val = tier[c.k];
+      // ABCD lists alternate grades ("A++ / AAAA / SS"); the column keeps the
+      // primary grade only.
+      if (c.k === 'abcd') val = String(val).split(' / ')[0];
+      const cls = rankColIsActive(c.k, activeCol) ? ' class="col-active"' : '';
+      cells += `<td${cls}>${escapeHtml(val)}</td>`;
+    });
+    return `<tr class="rds-rank-row${isCur ? ' current' : ''}" data-idx="${i}">${cells}</tr>`
+      + `<tr class="rds-rank-desc" data-idx="${i}" hidden><td colspan="${span}">`
       + `<p>${escapeHtml(t(tier.desc))}</p></td></tr>`;
   }).join('');
 }
 
 // Renders the 14-tier comparison table inside the RDS card. Clicking a row
-// reveals that tier's description, ARS and CN rating.
+// reveals that tier's description.
 function renderRdsRankTable() {
   const body = document.getElementById('rdsRankBody');
+  const head = document.getElementById('rdsRankHead');
   if (!body) return;
   const curIdx = RANK_TIERS.findIndex(x => x.levels.indexOf(rdsLevel) !== -1);
+  if (head) head.innerHTML = rankTierHead('qskill');
   body.innerHTML = rankTierRows(curIdx, 'qskill');
 }
 
@@ -2620,6 +2701,48 @@ function rds100RowHtml(h) {
 
 // Rows live in a dialog rather than under the card, so the reference stays
 // compact on a phone.
+// Column chooser for the rating tables. Checkboxes apply immediately and the
+// choice is stored on appData, so it survives a reload.
+function openRankColsPicker() {
+  const cols = rankColsSel();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box modal-rank-cols" role="dialog" aria-modal="true">
+      <h3></h3>
+      <div class="rank-cols-list"></div>
+      <div class="modal-actions"><button class="ok"></button></div>
+    </div>`;
+  overlay.querySelector('h3').textContent = t('rankColsTitle');
+  const list = overlay.querySelector('.rank-cols-list');
+  list.innerHTML = RANK_COLS.map(c => {
+    const on = cols.indexOf(c.k) !== -1 ? ' checked' : '';
+    return `<label class="rank-cols-item"><input type="checkbox" value="${c.k}"${on}>`
+      + `<span>${escapeHtml(t(c.key))}</span></label>`;
+  }).join('');
+
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  const close = () => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 200);
+    document.removeEventListener('keydown', onKey);
+  };
+  list.addEventListener('change', e => {
+    const box = e.target;
+    if (!box || box.type !== 'checkbox') return;
+    // Keep at least one column visible.
+    if (!box.checked && rankColsSel().length <= 1) { box.checked = true; return; }
+    rankColsToggle(box.value, box.checked);
+  });
+  const ok = overlay.querySelector('.ok');
+  ok.textContent = t('close');
+  ok.onclick = close;
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+}
+
 function rdsShowHistory(title, rowsHtml, emptyText) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -3440,12 +3563,9 @@ function renderRanksTable() {
   }
 
   const activeCol = (currentMode === 'bowlard') ? 'bowlard' : 'qskill';
+  const head = document.getElementById('rankTiersHead');
+  if (head) head.innerHTML = rankTierHead(activeCol);
   tbody.innerHTML = rankTierRows(curIdx, activeCol);
-
-  const thQ = document.getElementById('ranksColQSkill');
-  const thB = document.getElementById('ranksColBowlard');
-  if (thQ) thQ.classList.toggle('col-active', activeCol === 'qskill');
-  if (thB) thB.classList.toggle('col-active', activeCol === 'bowlard');
 }
 
 function qskillRankIndex(avg)  { return rankIndexFor('qskill',  avg || 0); }
@@ -4333,7 +4453,21 @@ function bindEvents() {
     r.addEventListener('change', e => {
       // Locked while a session runs (updateSetupLock), so no guard is needed.
       bowlardInputMode = e.target.value;
+      saveData();
     });
+  });
+
+  // Every setup control persists as soon as it changes, so an accidental
+  // refresh lands back on the same configuration.
+  document.querySelectorAll('input[name="sessionType"]').forEach(r => {
+    r.addEventListener('change', () => saveData());
+  });
+  const targetInput = document.getElementById('targetScore');
+  if (targetInput) targetInput.addEventListener('change', () => saveData());
+
+  // Rating-table column chooser (one shared setting, two tables).
+  document.querySelectorAll('[data-ranks-cols]').forEach(btn => {
+    btn.addEventListener('click', openRankColsPicker);
   });
 
   document.querySelectorAll('input[name="gameMode"]').forEach(r => {

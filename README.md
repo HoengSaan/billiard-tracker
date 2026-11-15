@@ -19,13 +19,14 @@ This work's code was created by AI (Vibe Coding.) As for the text portions, sinc
 
 此作品之代碼是由AI製作，即所謂「Vibe Coding」。至於文字部份，由於AI對檯球（即撞球、桌球，以下均稱之爲檯球）術語不甚熟悉，而且太多廢話，文字部份只能由人工完成。
 
-此計分器主要針對單人檯球遊戲（練習），目前有以下玩法，：
+此計分器主要針對單人檯球遊戲（練習），目前有以下玩法：
+The tracker is for single player billiard game (drills), following game available:
 
 - Hopkins Q Skill
 - Bowlard 
 - Runout Drill System (RDS)
 
-支持五種語言，官話（繁簡）、粵語、英語、日語（未完成）。多人玩法由於市面上有大量產品，有心情才會補上。
+基本的記錄儲存功能都有，亦可以導出導入。支持五種語言，官話（繁簡）、粵語、英語、日語（未完成）。多人玩法由於市面上有大量產品，有心情才會補上。
 
 ## 用法說明
 
@@ -60,6 +61,8 @@ A game last around 15 to 30 minutes. An oridinary player having an off day might
 
 **Bowlard (aka Bowlilard, Japanese: ボウラード, ボーラード)** is a single-player billiards skill test that applies bowling scoring to pool practice. It originated in Japan and has long been used by the Japan Professional Billiards Association (JPBA) in the practical segment of its professional qualification exams. Although, it is possible to play Bowlard as a multiplayer game, since one game last around 15 to 30 minutes (if two player game, 30 to 60 minutes), and the opponent can only sit and watch, so this is not a good game for multiplayer.
 
+![](pic/qskill.png)
+
 #### 簡明規則 (Core Rules)
 
 1. 在腳點上擺放10顆球，母球置於線後。指定袋。
@@ -67,16 +70,19 @@ A game last around 15 to 30 minutes. An oridinary player having an off day might
 3. 如玩家在第1桿清檯，為「全中」：得10分，加上隨後2桿的分數。如在第2桿清檯，為「補中」：得10分，加上隨後1桿的分數。
 4. 10局為1場，最高300分。每局有2桿。如未能將球打進指定袋口或犯規，則爲1桿。兩桿打完或清檯，該局結束。
 5. 第10局 — 每次全中或補中都獲得1次獎勵桿，完成全中或補中後重新擺球。因此本局最多可打3桿。若未取得全中或補中，則與其他局一樣正常結束。
-
-1. Rack 10 balls on the Foot Spot, cue ball on the Kitchen. Call Shot needed.
-2. All balls worth 1 point and can be shot in any order.
-3. If player clears the table on 1st inning, it is a "Strike", you get 10 points, plus the points from your next 2 innings. If player clears the table on 2nd inning, it is a "Spare", you get 10 points, plus the points from your next inning.
-4. 10 frames = 1 session, max 300 points. Player have 2 innings per frames. Innings end if the player failed to pocket a ball into a called pocket or commits a foul. Frame ends after 2 innings are finished or all balls are potted.
-5. 10th Frame — Every strike or spare earns one bonus roll, and a new rack is set up whenever a strike or spare is completed. That gives you up to 3 rolls in the frame. If no strike or spare is earned, the frame ends like any other frame. 
+6. Rack 10 balls on the Foot Spot, cue ball on the Kitchen. Call Shot needed.
+7. All balls worth 1 point and can be shot in any order.
+8. If player clears the table on 1st inning, it is a "Strike", you get 10 points, plus the points from your next 2 innings. If player clears the table on 2nd inning, it is a "Spare", you get 10 points, plus the points from your next inning.
+9. 10 frames = 1 session, max 300 points. Player have 2 innings per frames. Innings end if the player failed to pocket a ball into a called pocket or commits a foul. Frame ends after 2 innings are finished or all balls are potted.
+10. 10th Frame — Every strike or spare earns one bonus roll, and a new rack is set up whenever a strike or spare is completed. That gives you up to 3 rolls in the frame. If no strike or spare is earned, the frame ends like any other frame. 
 
 #### 補充說明
 
-有兩種記分方式：「單桿」就是一桿進多少球則輸入多少球。「累計」較反直覺，用戶輸入該盤總入球數。此方式中，「0」代表入球數無變化。
+有兩種記分方式：「單桿」就是一桿進多少球則輸入多少球。「累計」較反直覺，用戶輸入該盤總入球數（第十板除外）。
+
+2 ways to input: In "Per roll", you input how many balls you potted in that roll; In "Cumulative", you always input the total potted number in that frame (except 10th frame). 
+
+![](pic/bowlard.png)
 
 ### RDS
 
@@ -117,22 +123,24 @@ Since this system is designed for American-style (straight-cut) pockets, **it ca
 
 ## Rating Reference
 
-| BU Score | Player Level                  | ABCD        | Fargo Rating | Q Skill (avg/inning) | Bowlard (avg/session) | RDS Level | ARS (AZ) | 大陸民間 | Description                                                  | 說明                                                         |
-| -------- | ----------------------------- | ----------- | ------------ | -------------------- | --------------------- | --------- | -------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 185~200  | World Class 世界級            | A++/AAAA/SS | > 750        |                      |                       | 16        | 10-2     | 11       | Top professional. World class player. Capable of winning major  professional tournaments. Almost always finishes in the money in any  tournament entered. | 頂級職業選手，世界級水平，有能力贏得大型職業賽，參加任何比賽幾乎都能獲獎。 |
-| 175~184  | Professional 職業             | A+/AAA/S    | 720~749      | 18.1+                | 210+                  | 15        | 10-1     | 10, 11   | Professional, or player possessing professional skills. Capable of  winning local open tournaments. Usually finishes in the money in regional  tournaments. | 職業選手，能贏得地方公開賽，區域賽通常能獲獎。               |
-| 165~174  | Upper Amateur 業餘（上）      | A/AA        | 680~719      | 16.1~18.0            | 180~209               | 14        | 10, 10-1 | 9, 10    | Has professional skills. Can win or place high in local open tournaments. | 具備職業技術，能在地方公開賽奪冠或取得前列。                 |
-| 155~164  | Lower Amateur 業餘（下）      | A-/A        | 640~679      | 12.1~16.0            | 140~179               | 13        | 9, 10    | 8, 9     | Competitive amateur who can run several racks in a row.      | 有競技水平的業餘選手，能連續清檯多次。                       |
-| 140~154  | Upper Advanced 上級（上）     | B+          | 600~639      | 11.1~12.0            | 127~139               | 12        | 8, 9     | 7, 8     | Very good position play, strategy and consistency. Top league player.  Consistent competitor in local open tournaments. | 走位、策略與穩定性良，頂級地方選手，在地方公開賽有穩定競爭力。 |
-| 125~139  | Mid Advanced 上級（中）       | B           | 550~599      | 10.1~11.0            | 114~126               | 11        | 7, 8     | 6, 7     | Good position play, strategy and consistency. Good league player.  Competitive in local open tournaments. | 走位、策略與穩定性好，優秀地方選手，在地方公開賽有一定競爭力。 |
-| 110~124  | Lower Advanced 上級（下）     | B-          | 500~549      | 9.1~10.0             | 100~113               | 10        | 7, 8     | 5, 6     | Fair amount of knowledge and experience, but inconsistent in execution.  Average league player. | 有一定智識與經驗，但執行不穩定，普通地方選手。               |
-| 95~109   | Upper Intermediate 中級（上） | C+          | 450~499      | 8.1~9.0              | 87~99                 | 9         | 6, 7     | 4, 5     | Has learned quite a few shots, but has a lot to learn about position play  and strategy. Inconsistent. | 學過不少球型，但走位與策略仍需加強，表現不穩定。             |
-| 70~94    | Mid Intermediate 中級（中）   | C           | 400~449      | 7.1~8.0              | 74~86                 | 8         | 5, 6     | 3, 4     | Has a grasp of the fundamentals, but does not know much about the physics  of the game. Lower-level league player. | 掌握基本功，但對球理認識不多。                               |
-| 55~69    | Lower Intermediate 中級（下） | C-          | 350~399      | 6.1~7.0              | 60~73                 | 7         | 5, 6     | 2, 3     | Very basic knowledge of the fundamentals. Knows almost nothing about  position play. Lowest-level tournament player. | 只懂很基本的概念，幾乎不懂走位。                             |
-| 40~54    | Upper Beginner 初級（上）     | D+          | 325~349      | 5.1~6.0              | 50~59                 | 6         | 4, 5     | 2        | Knows little about the fundamentals, but might know a couple of shots.  Average social player. | 對基本功認識不多，只會打簡單的球。。                         |
-| 30~39    | Mid Beginner 初級（中）       | D           | 300~324      | 4.1~5.0              | 40~49                 | 5         | 3, 4     | 1        | May not know anything about the fundamentals or making shots.  Non-competitive. | 可能完全不懂基本功，球桿都沒拿穩。                           |
-| 20~29    | Lower Beginner 初級（下）     | D-          | 200~299      | 3.1~4.0              | 29~39                 | 4         | 2, 3     | 0        | Knows nothing about the game except maybe a few rules of play. | 除了幾條規則外幾乎不認識這項運動。                           |
-| 0~19     | Novice 入門                   | D--         | 0~200        | ~3.0                 | ~29                   | -3        | 1, 2     | 0        | Just start the game.                                         | 剛開始碰球。                                                 |
+使用網頁以便閱讀。Use the website for better experience.
+
+| BU Score | Player Level                  | ABCD     | Fargo Rating | Q Skill (avg/inning) | Bowlard (avg/session) | RDS Level | ARS (AZ) | 大陸   |
+| -------- | ----------------------------- | -------- | ------------ | -------------------- | --------------------- | --------- | -------- | ------ |
+| 185~200  | World Class 世界級            | A++/AAAA | > 750        |                      |                       | 16        | 10-2     | 11     |
+| 175~184  | Professional 職業             | A+/AAA   | 720~749      | 18.1+                | 210+                  | 15        | 10-1     | 10, 11 |
+| 165~174  | Upper Amateur 業餘（上）      | A/AA     | 680~719      | 16.1~18.0            | 180~209               | 14        | 10, 10-1 | 9, 10  |
+| 155~164  | Lower Amateur 業餘（下）      | A-/A     | 640~679      | 12.1~16.0            | 140~179               | 13        | 9, 10    | 8, 9   |
+| 140~154  | Upper Advanced 上級（上）     | B+       | 600~639      | 11.1~12.0            | 127~139               | 12        | 8, 9     | 7, 8   |
+| 125~139  | Mid Advanced 上級（中）       | B        | 550~599      | 10.1~11.0            | 114~126               | 11        | 7, 8     | 6, 7   |
+| 110~124  | Lower Advanced 上級（下）     | B-       | 500~549      | 9.1~10.0             | 100~113               | 10        | 7, 8     | 5, 6   |
+| 95~109   | Upper Intermediate 中級（上） | C+       | 450~499      | 8.1~9.0              | 87~99                 | 9         | 6, 7     | 4, 5   |
+| 70~94    | Mid Intermediate 中級（中）   | C        | 400~449      | 7.1~8.0              | 74~86                 | 8         | 5, 6     | 3, 4   |
+| 55~69    | Lower Intermediate 中級（下） | C-       | 350~399      | 6.1~7.0              | 60~73                 | 7         | 5, 6     | 2, 3   |
+| 40~54    | Upper Beginner 初級（上）     | D+       | 325~349      | 5.1~6.0              | 50~59                 | 6         | 4, 5     | 2      |
+| 30~39    | Mid Beginner 初級（中）       | D        | 300~324      | 4.1~5.0              | 40~49                 | 5         | 3, 4     | 1      |
+| 20~29    | Lower Beginner 初級（下）     | D-       | 200~299      | 3.1~4.0              | 29~39                 | 4         | 2, 3     | 0      |
+| 0~19     | Novice 入門                   | D--      | 0~200        | ~3.0                 | ~29                   | -3        | 1, 2     | 0      |
 
 ### 參考 Reference
 
