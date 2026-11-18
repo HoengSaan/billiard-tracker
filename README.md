@@ -156,3 +156,5 @@ Since this system is designed for American-style (straight-cut) pockets, **it ca
 
         <a href="https://www.fargorate.com/">Fargo Rate [EN/英]</a>
 
+## 使用
+- [marked.js Source: https://marked.js.org/](https://github.com/markedjs/marked)
