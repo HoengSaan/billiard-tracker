@@ -865,9 +865,56 @@ function applyLanguage() {
   renderHistory();
   updateUI();
   setDeleteMenuChevron(document.getElementById('deleteMenuGroup').style.display !== 'none');
+  // Rule text comes from rules/<id>/<lang>.md, not from LANG.
+  renderMarkdownBlocks();
   // The RDS panel builds its rules/meta text from t(), so it must be rebuilt
   // whenever the language changes.
   if (rdsView) renderRds();
+}
+
+// ---- Long-form markdown documents ---------------------------------------
+// Any <markdown id="..."></markdown> element is filled from
+// rules/<id>/<lang>.md. A missing translation falls back along these chains,
+// and the page must be served over http(s) because fetch() cannot read
+// file:// URLs.
+const MD_FALLBACK = {
+  yue:   ['yue', 'zh_TW', 'zh', 'en'],
+  zh_TW: ['zh_TW', 'zh', 'en'],
+  zh:    ['zh', 'zh_TW', 'en'],
+  en:    ['en'],
+  jp:    ['jp', 'en']
+};
+const mdCache = Object.create(null);
+
+async function fetchMarkdown(id, lang) {
+  const key = id + '|' + lang;
+  if (key in mdCache) return mdCache[key];
+  let text = null;
+  try {
+    const res = await fetch('rules/' + encodeURIComponent(id) + '/' + lang + '.md', { cache: 'no-cache' });
+    if (res.ok) text = await res.text();
+  } catch (err) { /* file:// or a missing file: try the next language */ }
+  mdCache[key] = text;
+  return text;
+}
+
+async function renderMarkdownBlocks() {
+  if (typeof marked === 'undefined') return;
+  const blocks = document.querySelectorAll('markdown[id]');
+  for (const el of blocks) {
+    const id = el.getAttribute('id');
+    const chain = MD_FALLBACK[currentLang] || ['en'];
+    let md = null;
+    for (const lang of chain) {
+      md = await fetchMarkdown(id, lang);
+      if (md !== null) break;
+    }
+    if (md === null) {
+      console.warn('[markdown] rules/' + id + '/' + currentLang + '.md is not reachable — serve the page over http.');
+      continue;
+    }
+    el.innerHTML = marked.parse(md);
+  }
 }
 
 // Chevron on the "Delete…" split button, mirroring the sibling controls.
